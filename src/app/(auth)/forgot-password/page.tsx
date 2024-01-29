@@ -1,5 +1,5 @@
 export default function Home() {
     return (
-        <div>ABC</div>
+        <div>Forgot Password</div>
     );
 }
