@@ -61,9 +61,8 @@ export default function TheLogin() {
                 const data = await res.json();
                 localStorage.setItem('accessToken', data.accessToken);
                 localStorage.setItem('refreshToken', data.refreshToken);
-                localStorage.setItem('id', data.uid);
+                localStorage.setItem('uid', data.uid);
                 message.success(data.message);
-
                 router.push('/room');
             } else {
                 const data = await res.json();
