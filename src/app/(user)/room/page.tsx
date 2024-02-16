@@ -21,7 +21,11 @@ interface Room {
 const TheRoom: React.FC = () => {
     const router = useRouter();
     const [homeSelect, setHomeSelect] = useState<string>(() => {
-        return localStorage.getItem('homeSelect') || '';
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('homeSelect') || '';
+        } else {
+            return '';
+        }
     });
     const [homes, setHomes] = useState<Home[]>([]);
     const [rooms, setRooms] = useState<Room[]>([]);
@@ -113,29 +117,28 @@ const TheRoom: React.FC = () => {
 
     return (
         <div>
-            <HomeList homes={homes} homeSelect={homeSelect} setHomeSelect={setHomeSelect}></HomeList>
-            <Card
-                className='mt-2'
-                style={{ width: 300 }}
-                cover={
-                    <img
-                        alt="example"
-                        src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                    />
-                }
-                actions={[
-                    <SettingOutlined key="setting" onClick={handleClick} />,
-                    <EditOutlined key="edit" />,
-                    <EllipsisOutlined key="ellipsis" />,
-                ]}
-            >
-                <Meta
-                    avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
-                    title="Card title"
-                    description="This is the description"
-                />
-            </Card>
+            <HomeList homes={homes} homeSelect={homeSelect} setHomeSelect={setHomeSelect} />
+            <div className="flex flex-wrap mt-4">
+                {rooms.map((room, index) => (
+                    <div key={room.rid} className="w-1/4 px-2 mb-4">
+                        <Card
+                            actions={[
+                                <SettingOutlined key="setting" onClick={handleClick} />,
+                                <EditOutlined key="edit" />,
+                                <EllipsisOutlined key="ellipsis" />,
+                            ]}
+                        >
+                            <Meta
+                                avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
+                                title={room.name}
+                                description="This is the room description"
+                            />
+                        </Card>
+                    </div>
+                ))}
+            </div>
         </div>
+
     );
 }
 
