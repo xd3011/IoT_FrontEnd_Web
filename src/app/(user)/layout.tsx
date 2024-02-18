@@ -37,7 +37,7 @@ export default function RootLayout({
   return (
     <Layout className="min-h-screen">
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="demo-logo-vertical text-white"> ABCdasbdjkashdj</div>
+        <div className="demo-logo-vertical text-white text-3xl flex justify-center mt-6 mb-6">Logo</div>
         <Menu
           theme="dark"
           mode="inline"

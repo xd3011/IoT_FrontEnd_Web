@@ -17,13 +17,12 @@ interface HomeListProps {
 }
 
 export default function HomeList({ homes, homeSelect, setHomeSelect }: HomeListProps): JSX.Element {
-    console.log(homeSelect);
     const handleChange = (event: SelectChangeEvent) => {
         setHomeSelect(event.target.value as string);
     };
 
     return (
-        <Box sx={{ maxWidth: 150 }}>
+        <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth sx={{ "& .MuiInputBase-root": { fontSize: "16px" } }}>
                 <InputLabel id="demo-simple-select-label">Home</InputLabel>
                 <Select
