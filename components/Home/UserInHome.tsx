@@ -35,7 +35,10 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
         { field: 'address', headerName: 'Address', width: 150 },
         { field: 'phone', headerName: 'Phone', width: 120 },
         { field: 'email', headerName: 'Email', width: 200 },
-        {
+    ];
+
+    if (admin) {
+        columns.push({
             field: 'actions',
             headerName: 'Actions',
             width: 120,
@@ -47,8 +50,8 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
                     Delete
                 </Button>
             ),
-        },
-    ];
+        });
+    }
 
     const handleDelete = async (userId: string) => {
         try {
