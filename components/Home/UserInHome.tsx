@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
-import { message, Button } from 'antd';
+import { message, Button, Modal } from 'antd';
 import AddUser from './AddUser';
 
 
@@ -22,10 +22,12 @@ interface User {
 
 export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps) {
     const [users, setUsers] = useState<User[]>([]);
-    const [admin, setAdmin] = useState<Boolean>();
+    const [admin, setAdmin] = useState<boolean | undefined>();
     const [showAddUserModal, setShowAddUserModal] = useState<Boolean>(false);
-    const [reload, setReload] = useState<Boolean>(false);
-
+    const [reload, setReload] = useState<boolean | undefined>(false);
+    const [confirmRemoveHomeVisible, setConfirmRemoveHomeVisible] = useState<boolean | undefined>(false);
+    const [confirmDeleteVisible, setconfirmDeleteVisible] = useState<boolean | undefined>(false);
+    const [selectedUserId, setSelectedUserId] = useState<string>("");
 
     const columns: GridColDef[] = [
         { field: 'index', headerName: 'ID', width: 70 },
@@ -44,7 +46,10 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
             width: 120,
             renderCell: (params) => (
                 <Button
-                    onClick={() => handleDelete(params.row.id)}
+                    onClick={() => {
+                        setSelectedUserId(params.row.id);
+                        setconfirmDeleteVisible(true);
+                    }}
                     danger
                 >
                     Delete
@@ -53,7 +58,7 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
         });
     }
 
-    const handleDelete = async (userId: string) => {
+    const handleDelete = async () => {
         try {
             const res = await fetch(`http://localhost:5000/api/user/deleteUserFromHome`, {
                 method: 'DELETE',
@@ -61,7 +66,7 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
                     'Content-Type': 'application/json',
                     'Authorization': accessToken,
                 },
-                body: JSON.stringify({ uid: userId, hid: homeSelect }),
+                body: JSON.stringify({ uid: selectedUserId, hid: homeSelect }),
             });
             if (res.ok) {
                 const data = await res.json();
@@ -78,6 +83,31 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
         }
     };
 
+    const handleRemove = async () => {
+        const uid = localStorage.getItem('uid') || '';
+        try {
+            const res = await fetch(`http://localhost:5000/api/user/removeHome`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': accessToken,
+                },
+                body: JSON.stringify({ uid: uid, hid: homeSelect }),
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (!data.error) {
+                    setReload(prev => !prev);
+                    message.success(data.message);
+                } else {
+                    message.error(data.error);
+                }
+            }
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            message.error('Error deleting user');
+        }
+    }
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -127,14 +157,37 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
         setShowAddUserModal(true);
     };
 
+    const handleConfirmRemoveHome = () => {
+        handleRemove();
+        setConfirmRemoveHomeVisible(false);
+    };
+
+    const handleCancelRemoveHome = () => {
+        setConfirmRemoveHomeVisible(false);
+    };
+
+    const handleConfirmDelete = () => {
+        handleDelete();
+        setconfirmDeleteVisible(false);
+    };
+
+    const handleCancelDelete = () => {
+        setconfirmDeleteVisible(false);
+    };
+
 
     return (
         <div>
-            {admin && (
-                <Button onClick={handleAddUser} type="primary" className='bg-blue-500 mb-4'>
-                    Add User
+            <div className="flex justify-between mb-4">
+                {admin && (
+                    <Button onClick={handleAddUser} type="primary" className='bg-blue-500'>
+                        Add User
+                    </Button>
+                )}
+                <Button onClick={() => setConfirmRemoveHomeVisible(true)} type="primary" className='bg-blue-500'>
+                    Remove Home
                 </Button>
-            )}
+            </div>
             <DataGrid
                 rows={users}
                 columns={columns}
@@ -158,6 +211,24 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
                     homeSelect={homeSelect}
                 />
             )}
+            <Modal
+                title="Confirm Delete"
+                visible={confirmDeleteVisible}
+                onOk={handleConfirmDelete}
+                onCancel={handleCancelDelete}
+                okButtonProps={{ type: "primary", danger: true }}
+            >
+                <p>Are you sure you want to delete this user?</p>
+            </Modal>
+            <Modal
+                title="Remove Home"
+                visible={confirmRemoveHomeVisible}
+                onOk={handleConfirmRemoveHome}
+                onCancel={handleCancelRemoveHome}
+                okButtonProps={{ type: "primary", danger: true }}
+            >
+                <p>Are you sure you want to remove this home?</p>
+            </Modal>
         </div>
     );
 }
