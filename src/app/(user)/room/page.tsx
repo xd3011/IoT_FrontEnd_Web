@@ -7,7 +7,6 @@ import HomeList from "../../../../components/HomeList";
 import UserInHome from "../../../../components/Home/UserInHome";
 import EditRoom from "../../../../components/Room/EditRoom";
 import CreateRoom from "../../../../components/Room/CreateRoom";
-import Dialog, { DialogProps } from '@mui/material/Dialog';
 
 interface Home {
     hid: string;
@@ -223,7 +222,7 @@ const TheRoom: React.FC = () => {
                 )}
             </Modal>
             <Modal title="User in Home" visible={isUserInHomeVisible} onCancel={closeUserInHomePopup} footer={null}>
-                {homeSelect && <UserInHome />}
+                {homeSelect && <UserInHome homeSelect={homeSelect} accessToken={accessToken} />}
             </Modal>
         </div>
     );

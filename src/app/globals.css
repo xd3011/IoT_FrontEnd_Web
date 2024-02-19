@@ -5,3 +5,9 @@
 .ant-modal-content {
     min-width: max-content;
 }
+
+body>div:nth-child(14)>div>div.ant-modal-wrap>.ant-modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
