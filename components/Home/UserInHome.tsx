@@ -14,7 +14,7 @@ interface User {
     id: number;
     name: string;
     age: number;
-    sex: string;
+    gender: string;
     address: string;
     phone: string;
     email: string;
@@ -33,7 +33,7 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
         { field: 'index', headerName: 'ID', width: 70 },
         { field: 'name', headerName: 'Name', width: 130 },
         { field: 'age', headerName: 'Age', type: 'number', width: 90 },
-        { field: 'sex', headerName: 'Sex', width: 90 },
+        { field: 'gender', headerName: 'Gender', width: 90 },
         { field: 'address', headerName: 'Address', width: 150 },
         { field: 'phone', headerName: 'Phone', width: 120 },
         { field: 'email', headerName: 'Email', width: 200 },
@@ -129,11 +129,11 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
                             id: user._id,
                             name: user.name,
                             age: user.age,
-                            sex: user.sex,
+                            gender: user.gender,
                             address: user.address,
                             phone: user.phone,
                             email: user.email,
-                            index: index + 1, // Increment index by 1
+                            index: index + 1,
                         }));
                         setUsers(mappedUsers);
                         if (data.homeAdmin?._id == localStorage.getItem('uid')) {
@@ -212,6 +212,7 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
                 />
             )}
             <Modal
+                className='abc'
                 title="Confirm Delete"
                 visible={confirmDeleteVisible}
                 onOk={handleConfirmDelete}

@@ -221,7 +221,7 @@ const TheRoom: React.FC = () => {
                     <CreateRoom accessToken={accessToken} onCancel={handleCancel} onCreate={handleRoomDataChange} homeSelect={homeSelect} />
                 )}
             </Modal>
-            <Modal title="User in Home" visible={isUserInHomeVisible} onCancel={closeUserInHomePopup} footer={null}>
+            <Modal className='flex justify-center min-w-max' title="User in Home" visible={isUserInHomeVisible} onCancel={closeUserInHomePopup} footer={null}>
                 {homeSelect && <UserInHome homeSelect={homeSelect} accessToken={accessToken} />}
             </Modal>
         </div>
