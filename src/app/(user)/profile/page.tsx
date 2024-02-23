@@ -73,9 +73,10 @@ export default function Example() {
                         setPhone(data.user.phone);
                         setAddress(data.user.address);
                         setAbout(data.user.about);
+                        message.success(data.message);
                     }
                 } else {
-                    console.error('Failed to fetch users');
+                    message.error('Failed to fetch users');
                 }
             } catch (error) {
                 console.error('Error fetching users:', error);
