@@ -125,16 +125,26 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
                         message.error(data.error);
                     } else {
                         // Map fetched data to User interface
-                        const mappedUsers: User[] = data.users.map((user: any, index: number) => ({
-                            id: user._id,
-                            name: user.name,
-                            age: user.age,
-                            gender: user.gender,
-                            address: user.address,
-                            phone: user.phone,
-                            email: user.email,
-                            index: index + 1,
-                        }));
+                        const mappedUsers: User[] = data.users.map((user: any, index: number) => {
+                            let gender: string;
+                            if (user.gender === -1) {
+                                gender = "Male";
+                            } else if (user.gender === 1) {
+                                gender = "Female";
+                            } else {
+                                gender = "Unknown";
+                            }
+                            return {
+                                id: user._id,
+                                name: user.name,
+                                age: user.age,
+                                gender: gender,
+                                address: user.address,
+                                phone: user.phone,
+                                email: user.email,
+                                index: index + 1,
+                            };
+                        });
                         setUsers(mappedUsers);
                         if (data.homeAdmin?._id == localStorage.getItem('uid')) {
                             setAdmin(true);

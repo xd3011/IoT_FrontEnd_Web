@@ -14,7 +14,7 @@ export default function Example() {
     const [editName, setEditName] = useState(false);
     const [age, setAge] = useState("");
     const [editAge, setEditAge] = useState(false);
-    const [gender, setGender] = useState("other");
+    const [gender, setGender] = useState("");
     const [editGender, setEditGender] = useState(false);
     const [email, setEmail] = useState("");
     const [editEmail, setEditEmail] = useState(false);
@@ -60,7 +60,7 @@ export default function Example() {
                     } else {
                         setName(data.user.name);
                         setAge(data.user.age);
-                        setGender(data.user.gender);
+                        setGender(data.user.gender === -1 ? "male" : "female");
                         setEmail(data.user.email);
                         setPhone(data.user.phone);
                         setAddress(data.user.address);
@@ -81,8 +81,27 @@ export default function Example() {
         setEditAbout(true);
     };
 
-    const handleSaveAbout = () => {
-        console.log(about);
+    const handleSaveAbout = async () => {
+        try {
+            const res = await fetch(`http://localhost:5000/api/user/updateUserProfile`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': accessToken,
+                },
+                body: JSON.stringify({ about: about }),
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (!data.error) {
+                    message.success(data.message);
+                } else {
+                    message.error(data.error);
+                }
+            }
+        } catch (error) {
+            console.error('Error updating home:', error);
+        }
         setEditAbout(false);
     };
 
@@ -98,8 +117,27 @@ export default function Example() {
         setEditName(true);
     };
 
-    const handleSaveName = () => {
-        console.log(name);
+    const handleSaveName = async () => {
+        try {
+            const res = await fetch(`http://localhost:5000/api/user/updateUserProfile`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': accessToken,
+                },
+                body: JSON.stringify({ name: name }),
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (!data.error) {
+                    message.success(data.message);
+                } else {
+                    message.error(data.error);
+                }
+            }
+        } catch (error) {
+            console.error('Error updating home:', error);
+        }
         setEditName(false);
     };
 
@@ -116,8 +154,27 @@ export default function Example() {
         setEditAge(true);
     };
 
-    const handleSaveAge = () => {
-        console.log(age);
+    const handleSaveAge = async () => {
+        try {
+            const res = await fetch(`http://localhost:5000/api/user/updateUserProfile`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': accessToken,
+                },
+                body: JSON.stringify({ age: age }),
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (!data.error) {
+                    message.success(data.message);
+                } else {
+                    message.error(data.error);
+                }
+            }
+        } catch (error) {
+            console.error('Error updating home:', error);
+        }
         setEditAge(false);
     };
 
@@ -134,8 +191,28 @@ export default function Example() {
         setEditGender(true);
     };
 
-    const handleSaveGender = () => {
-        console.log(gender);
+    const handleSaveGender = async () => {
+        let genderNumber = gender === "male" ? -1 : 1;
+        try {
+            const res = await fetch(`http://localhost:5000/api/user/updateUserProfile`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': accessToken,
+                },
+                body: JSON.stringify({ gender: genderNumber }),
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (!data.error) {
+                    message.success(data.message);
+                } else {
+                    message.error(data.error);
+                }
+            }
+        } catch (error) {
+            console.error('Error updating home:', error);
+        }
         setEditGender(false);
     };
 
@@ -152,8 +229,27 @@ export default function Example() {
         setEditEmail(true);
     };
 
-    const handleSaveEmail = () => {
-        console.log(email);
+    const handleSaveEmail = async () => {
+        try {
+            const res = await fetch(`http://localhost:5000/api/user/updateUserProfile`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': accessToken,
+                },
+                body: JSON.stringify({ email: email }),
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (!data.error) {
+                    message.success(data.message);
+                } else {
+                    message.error(data.error);
+                }
+            }
+        } catch (error) {
+            console.error('Error updating home:', error);
+        }
         setEditEmail(false);
     };
 
@@ -170,8 +266,27 @@ export default function Example() {
         setEditPhone(true);
     };
 
-    const handleSavePhone = () => {
-        console.log(phone);
+    const handleSavePhone = async () => {
+        try {
+            const res = await fetch(`http://localhost:5000/api/user/updateUserProfile`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': accessToken,
+                },
+                body: JSON.stringify({ phone: phone }),
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (!data.error) {
+                    message.success(data.message);
+                } else {
+                    message.error(data.error);
+                }
+            }
+        } catch (error) {
+            console.error('Error updating home:', error);
+        }
         setEditPhone(false);
     };
 
@@ -188,8 +303,27 @@ export default function Example() {
         setEditAddress(true);
     };
 
-    const handleSaveAddress = () => {
-        console.log(address);
+    const handleSaveAddress = async () => {
+        try {
+            const res = await fetch(`http://localhost:5000/api/user/updateUserProfile`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': accessToken,
+                },
+                body: JSON.stringify({ address: address }),
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (!data.error) {
+                    message.success(data.message);
+                } else {
+                    message.error(data.error);
+                }
+            }
+        } catch (error) {
+            console.error('Error updating home:', error);
+        }
         setEditAddress(false);
     };
 
@@ -329,7 +463,6 @@ export default function Example() {
                             >
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
-                                <option value="other">Other</option>
                             </select>
                         </div>
                         {editGender && (
