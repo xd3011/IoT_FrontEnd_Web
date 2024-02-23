@@ -46,11 +46,11 @@ export default function RootLayout({
       case 'home':
         return ['1'];
       case 'room':
-        return ['2']
+        return ['2'];
       case 'device':
-        return ['3']
+        return ['3'];
       default:
-        return ['1'];
+        return ['0'];
     }
   }
 
@@ -99,7 +99,7 @@ export default function RootLayout({
 
   return (
     <Layout className="min-h-screen">
-      <Sider trigger={null} collapsible collapsed={collapsed}>
+      <Sider trigger={null} collapsible collapsed={collapsed} style={{ position: 'fixed', height: '100vh' }}>
         <div className="demo-logo-vertical text-white text-3xl flex justify-center mt-6 mb-6">Logo</div>
         <Menu
           theme="dark"
@@ -133,7 +133,7 @@ export default function RootLayout({
           ]}
         />
       </Sider>
-      <Layout>
+      <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
         <Header style={{ padding: 0, background: colorBgContainer }}>
           <div className="flex justify-between">
             <Button

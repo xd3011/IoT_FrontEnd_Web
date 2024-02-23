@@ -651,7 +651,7 @@ export default function Example() {
                                     className="block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
                                 />
                             ) : (
-                                <p className="text-gray-900">{about}</p>
+                                <p className="text-gray-900 font-semibold">{about}</p>
                             )}
                         </div>
                         {!editAbout && (
