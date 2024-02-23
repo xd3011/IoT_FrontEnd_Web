@@ -10,28 +10,36 @@ export default function Example() {
 
     const [about, setAbout] = useState("");
     const [editAbout, setEditAbout] = useState(false);
+    const [initialAbout, setInitialAbout] = useState("");
+
     const [name, setName] = useState("");
     const [editName, setEditName] = useState(false);
+    const [initialName, setInitialName] = useState("");
+
     const [age, setAge] = useState("");
     const [editAge, setEditAge] = useState(false);
+    const [initialAge, setInitialAge] = useState("");
+
     const [gender, setGender] = useState("");
     const [editGender, setEditGender] = useState(false);
+    const [initialGender, setInitialGender] = useState("");
+
     const [email, setEmail] = useState("");
     const [editEmail, setEditEmail] = useState(false);
+    const [initialEmail, setInitialEmail] = useState("");
+
     const [phone, setPhone] = useState("");
     const [editPhone, setEditPhone] = useState(false);
+    const [initialPhone, setInitialPhone] = useState("");
+
     const [address, setAddress] = useState("");
     const [editAddress, setEditAddress] = useState(false);
+    const [initialAddress, setInitialAddress] = useState("");
 
-    let uid: string;
     let accessToken: string;
 
     if (typeof localStorage !== 'undefined') {
-        uid = localStorage.getItem('uid') || '';
         accessToken = localStorage.getItem('accessToken') || '';
-        if (!uid) {
-            console.error('User id not found');
-        }
         if (!accessToken) {
             console.error('accessToken not found');
             router.push('/login');
@@ -78,6 +86,7 @@ export default function Example() {
 
     // Edit About
     const handleEditAbout = () => {
+        setInitialAbout(about);
         setEditAbout(true);
     };
 
@@ -106,6 +115,7 @@ export default function Example() {
     };
 
     const handleCancelAbout = () => {
+        setAbout(initialAbout);
         setEditAbout(false);
     };
     const handleChangeAbout = (event: any) => {
@@ -115,6 +125,7 @@ export default function Example() {
     // Edit Name
     const handleEditName = () => {
         setEditName(true);
+        setInitialName(name);
     };
 
     const handleSaveName = async () => {
@@ -142,6 +153,7 @@ export default function Example() {
     };
 
     const handleCancelName = () => {
+        setName(initialName);
         setEditName(false);
     };
 
@@ -151,6 +163,7 @@ export default function Example() {
 
     // Edit Age
     const handleEditAge = () => {
+        setInitialAge(age);
         setEditAge(true);
     };
 
@@ -179,6 +192,7 @@ export default function Example() {
     };
 
     const handleCancelAge = () => {
+        setAge(initialAge);
         setEditAge(false);
     };
 
@@ -188,6 +202,7 @@ export default function Example() {
 
     // Edit Gender
     const handleEditGender = () => {
+        setInitialGender(gender);
         setEditGender(true);
     };
 
@@ -217,6 +232,7 @@ export default function Example() {
     };
 
     const handleCancelGender = () => {
+        setGender(initialGender);
         setEditGender(false);
     };
 
@@ -226,6 +242,7 @@ export default function Example() {
 
     // Edit Email
     const handleEditEmail = () => {
+        setInitialEmail(email);
         setEditEmail(true);
     };
 
@@ -254,6 +271,7 @@ export default function Example() {
     };
 
     const handleCancelEmail = () => {
+        setEmail(initialEmail);
         setEditEmail(false);
     };
 
@@ -263,6 +281,7 @@ export default function Example() {
 
     // Edit Phone
     const handleEditPhone = () => {
+        setInitialPhone(phone);
         setEditPhone(true);
     };
 
@@ -291,6 +310,7 @@ export default function Example() {
     };
 
     const handleCancelPhone = () => {
+        setPhone(initialPhone);
         setEditPhone(false);
     };
 
@@ -300,6 +320,7 @@ export default function Example() {
 
     // Edit Address
     const handleEditAddress = () => {
+        setInitialAddress(address);
         setEditAddress(true);
     };
 
@@ -328,6 +349,7 @@ export default function Example() {
     };
 
     const handleCancelAddress = () => {
+        setAddress(initialAddress);
         setEditAddress(false);
     };
 
@@ -337,12 +359,16 @@ export default function Example() {
 
     return (
         <div className="space-y-12">
-            <div className="border-b border-gray-900/10 pb-12">
-                <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
-                <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
+            <div className="border-b border-gray-900/10 pb-12 flex">
+                <div className="w-2/5">
+                    <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
+                    <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
+                </div>
 
-                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div className="sm:col-span-3 ">
+                <div className="border-l border-gray-900/10 h-auto mr-8" />
+
+                <div className="w-1/2 mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div className="sm:col-span-2">
                         <div className="flex justify-between">
                             <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
                                 Name
@@ -351,7 +377,7 @@ export default function Example() {
                                 <button
                                     type="button"
                                     onClick={handleEditName}
-                                    className="ml-2 px-2.5 py-1 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+                                    className="ml-2 px-3 py-1.5 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
                                 >
                                     <EditOutlined />
                                 </button>
@@ -391,7 +417,7 @@ export default function Example() {
                         )}
                     </div>
 
-                    <div className="sm:col-span-1">
+                    <div className="sm:col-span-2">
                         <div className='flex justify-between'>
                             <label htmlFor="age" className="block text-sm font-medium leading-6 text-gray-900">
                                 Age
@@ -437,7 +463,7 @@ export default function Example() {
                         )}
                     </div>
 
-                    <div className="sm:col-span-1">
+                    <div className="sm:col-span-2">
                         <div className='flex justify-between'>
                             <label htmlFor="gender" className="block text-sm font-medium leading-6 text-gray-900">
                                 Gender
@@ -628,13 +654,17 @@ export default function Example() {
                 </div>
             </div>
 
-            <div className="border-b border-gray-900/10 pb-12">
-                <h2 className="text-base font-semibold leading-7 text-gray-900">Profile</h2>
-                <p className="mt-1 text-sm leading-6 text-gray-600">
-                    This information will be displayed publicly so be careful what you share.
-                </p>
+            <div className="border-b border-gray-900/10 pb-12 flex">
+                <div className="w-2/5">
+                    <h2 className="text-base font-semibold leading-7 text-gray-900">Profile</h2>
+                    <p className="mt-1 text-sm leading-6 text-gray-600">
+                        This information will be displayed publicly so be careful what you share.
+                    </p>
+                </div>
 
-                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <div className="border-l border-gray-900/10 h-auto mr-8" />
+
+                <div className="w-1/2 mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div className="col-span-full">
                         <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
                             Bio
