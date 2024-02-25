@@ -559,7 +559,7 @@ export default function Example() {
                         )}
                     </div>
 
-                    <div className="sm:col-span-2">
+                    <div className="sm:col-span-3">
                         <div className='flex justify-between'>
                             <label htmlFor="phone" className="block text-sm font-medium leading-6 text-gray-900">
                                 Phone number

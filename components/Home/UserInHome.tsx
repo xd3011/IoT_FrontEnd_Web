@@ -10,16 +10,6 @@ interface UserInHomeProps {
     accessToken: string;
 }
 
-interface User {
-    id: number;
-    name: string;
-    age: number;
-    gender: string;
-    address: string;
-    phone: string;
-    email: string;
-}
-
 export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps) {
     const [users, setUsers] = useState<User[]>([]);
     const [admin, setAdmin] = useState<boolean | undefined>();
@@ -47,7 +37,7 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
             renderCell: (params) => (
                 <Button
                     onClick={() => {
-                        setSelectedUserId(params.row.id);
+                        setSelectedUserId(params.row.uid);
                         setconfirmDeleteVisible(true);
                     }}
                     danger
@@ -135,7 +125,7 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
                                 gender = "Unknown";
                             }
                             return {
-                                id: user._id,
+                                uid: user._id,
                                 name: user.name,
                                 age: user.age,
                                 gender: gender,
@@ -201,7 +191,7 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
             <DataGrid
                 rows={users}
                 columns={columns}
-                getRowId={(row) => row.id}
+                getRowId={(row) => row.uid}
                 initialState={{
                     pagination: {
                         paginationModel: { page: 0, pageSize: 5 },

@@ -8,12 +8,6 @@ import EditHome from "../../../../components/Home/EditHome";
 
 const { Meta } = Card;
 
-interface Home {
-    hid: string;
-    name: string;
-    address: string;
-}
-
 const TheHome: React.FC = () => {
     const router = useRouter();
 

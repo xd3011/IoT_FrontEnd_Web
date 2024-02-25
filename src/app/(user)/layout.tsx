@@ -9,6 +9,8 @@ import {
   LogoutOutlined,
   UserOutlined,
   VideoCameraOutlined,
+  HomeOutlined,
+
 } from '@ant-design/icons';
 import { message } from "antd";
 import { Layout, Menu, Button, theme, Avatar, Dropdown } from 'antd';
@@ -108,7 +110,7 @@ export default function RootLayout({
           items={[
             {
               key: '1',
-              icon: <UserOutlined />,
+              icon: <HomeOutlined />,
               label: 'Home',
               onClick: () => router.push('/home'),
             },

@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, message } from 'antd';
 
-interface Home {
-    hid: string;
-    name: string;
-    address: string;
-}
-
 interface Props {
     home: Home;
     onCancel: () => void;

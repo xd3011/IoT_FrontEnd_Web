@@ -8,16 +8,6 @@ import UserInHome from "../../../../components/Home/UserInHome";
 import EditRoom from "../../../../components/Room/EditRoom";
 import CreateRoom from "../../../../components/Room/CreateRoom";
 
-interface Home {
-    hid: string;
-    name: string;
-}
-
-interface Room {
-    rid: string;
-    name: string;
-}
-
 const { Meta } = Card;
 
 const TheRoom: React.FC = () => {
@@ -89,7 +79,7 @@ const TheRoom: React.FC = () => {
             }
         };
         fetchData();
-    }, [accessToken]);
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
