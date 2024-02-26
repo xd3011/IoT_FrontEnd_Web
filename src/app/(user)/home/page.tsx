@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Avatar, Card, Modal, Button, message, Form, Input } from 'antd';
+import { Avatar, Card, Modal, Button, message } from 'antd';
 import { EditOutlined, SettingOutlined, DeleteOutlined } from '@ant-design/icons';
 import CreateHome from "../../../../components/Home/CreateHome";
 import EditHome from "../../../../components/Home/EditHome";
@@ -90,11 +90,6 @@ const TheHome: React.FC = () => {
         setCreateModalVisible(true);
     };
 
-    const handleEditModal = (home: Home) => {
-        setSelectedHome(home);
-        setEditModalVisible(true);
-    };
-
     const handleCancelCreateModal = () => {
         setCreateModalVisible(false);
     };
@@ -120,11 +115,14 @@ const TheHome: React.FC = () => {
                 Create Home
             </Button>
             <div className={`flex flex-wrap mt-4 ${homes.length > 4 ? 'overflow-x-auto' : ''}`}>
-                {homes.map((home, index) => (
+                {homes.map((home) => (
                     <div key={home.hid} className="w-1/4 px-2 mb-4">
                         <Card
                             actions={[
-                                <EditOutlined key="edit" onClick={() => handleEditModal(home)} />,
+                                <EditOutlined key="edit" onClick={() => {
+                                    setSelectedHome(home);
+                                    setEditModalVisible(true);
+                                }} />,
                                 <DeleteOutlined key="delete" onClick={() => {
                                     setSelectedHomeId(home.hid);
                                     setDeleteModalVisible(true);

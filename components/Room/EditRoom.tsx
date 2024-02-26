@@ -8,12 +8,12 @@ interface Room {
 
 interface Props {
     room: Room;
-    onCancel: () => void;
     accessToken: string;
-    onDataUpdated: () => void; // Thêm callback để thông báo cho component cha khi dữ liệu được cập nhật
+    onCancel: () => void;
+    onDataUpdated: () => void;
 }
 
-const EditRoom: React.FC<Props> = ({ room, onCancel, accessToken, onDataUpdated }) => {
+const EditRoom: React.FC<Props> = ({ room, accessToken, onCancel, onDataUpdated }) => {
     const [roomName, setRoomName] = useState<string>(room.name);
     const [form] = Form.useForm();
 

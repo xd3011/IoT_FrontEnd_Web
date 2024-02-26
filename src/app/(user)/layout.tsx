@@ -5,10 +5,8 @@ import React, { useState, } from 'react';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
   LogoutOutlined,
   UserOutlined,
-  VideoCameraOutlined,
   HomeOutlined,
 
 } from '@ant-design/icons';
@@ -49,8 +47,6 @@ export default function RootLayout({
         return ['1'];
       case 'room':
         return ['2'];
-      case 'device':
-        return ['3'];
       default:
         return ['0'];
     }
@@ -110,24 +106,18 @@ export default function RootLayout({
           items={[
             {
               key: '1',
-              icon: <HomeOutlined />,
-              label: 'Home',
+              icon: <MenuFoldOutlined />,
+              label: 'Home User',
               onClick: () => router.push('/home'),
             },
             {
               key: '2',
-              icon: <VideoCameraOutlined />,
-              label: 'Room',
+              icon: <HomeOutlined />,
+              label: 'Home',
               onClick: () => router.push('/room'),
             },
             {
               key: '3',
-              icon: <UploadOutlined />,
-              label: 'Device',
-              onClick: () => router.push('/device'),
-            },
-            {
-              key: '4',
               icon: <LogoutOutlined />,
               label: 'Logout',
               onClick: () => handleLogout()

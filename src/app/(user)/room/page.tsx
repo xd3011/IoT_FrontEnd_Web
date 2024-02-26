@@ -1,14 +1,13 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
-import { EditOutlined, SettingOutlined, DeleteOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Card, Modal, Button, message } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
+import { Modal, Button, message } from 'antd';
 import HomeList from "../../../../components/HomeList";
 import UserInHome from "../../../../components/Home/UserInHome";
-import EditRoom from "../../../../components/Room/EditRoom";
+import ViewRoom from "../../../../components/Room/ViewRoom";
 import CreateRoom from "../../../../components/Room/CreateRoom";
-
-const { Meta } = Card;
+import TheDevice from '../../../../components/Device/TheDevice';
 
 const TheRoom: React.FC = () => {
     const router = useRouter();
@@ -21,13 +20,10 @@ const TheRoom: React.FC = () => {
     });
     const [homes, setHomes] = useState<Home[]>([]);
     const [rooms, setRooms] = useState<Room[]>([]);
-    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-    const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
     const [roomDataChanged, setRoomDataChanged] = useState<boolean>(false);
-    const [modalAction, setModalAction] = useState<'edit' | 'create'>('edit');
-    const [selectedRoomId, setSelectedRoomId] = useState<string>("");
-    const [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(false);
     const [isUserInHomeVisible, setIsUserInHomeVisible] = useState<boolean>(false);
+    const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
+
     let accessToken: string;
 
     if (typeof localStorage !== 'undefined') {
@@ -81,82 +77,12 @@ const TheRoom: React.FC = () => {
         fetchData();
     }, []);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const resRoom = await fetch(`http://localhost:5000/api/room/${homeSelect}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': accessToken,
-                    }
-                });
-                if (resRoom.ok) {
-                    const data = await resRoom.json();
-                    if (!data.rooms) {
-                        message.warning(data.error);
-                    }
-                    else {
-                        setRooms(data.rooms.map((e: any) => ({ rid: e._id, name: e.room_name })));
-                    }
-                }
-                else {
-                    const data = await resRoom.json();
-                    message.error(data.error);
-                }
-            } catch (error) {
-                console.error('Error fetching room data:', error);
-            }
-        };
-        fetchData();
-    }, [homeSelect, roomDataChanged]);
-
-    const showModal = (action: 'edit' | 'create', room?: Room) => {
-        setModalAction(action);
-        setSelectedRoom(room || null);
-        setIsModalVisible(true);
+    const handleCreateModal = () => {
+        setCreateModalVisible(true);
     };
 
-    const handleCancel = () => {
-        setSelectedRoom(null);
-        setIsModalVisible(false);
-    };
-
-    const handleRoomDataChange = () => {
-        setRoomDataChanged(prev => !prev);
-    };
-
-    const handleDeleteRoom = (rid: string) => {
-        setSelectedRoomId(rid);
-        setIsDeleteModalVisible(true);
-    };
-
-    const handleConfirmDelete = async () => {
-        try {
-            const res = await fetch(`http://localhost:5000/api/room/${selectedRoomId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': accessToken,
-                },
-            });
-            if (res.ok) {
-                const data = await res.json();
-                message.success(data.message);
-                handleRoomDataChange();
-            } else {
-                const data = await res.json();
-                message.error(data.error);
-            }
-        } catch (error) {
-            console.error('Error deleting room:', error);
-        }
-        setIsDeleteModalVisible(false);
-    };
-
-    const handleCancelDelete = () => {
-        setSelectedRoomId("");
-        setIsDeleteModalVisible(false);
+    const handleCancelCreateModal = () => {
+        setCreateModalVisible(false);
     };
 
     const showUserInHomePopup = () => {
@@ -165,6 +91,10 @@ const TheRoom: React.FC = () => {
 
     const closeUserInHomePopup = () => {
         setIsUserInHomeVisible(false);
+    };
+
+    const handleRoomDataChange = () => {
+        setRoomDataChanged(prev => !prev);
     };
 
     return (
@@ -176,40 +106,19 @@ const TheRoom: React.FC = () => {
                         User in home
                     </Button>
                 </div>
-                <Button onClick={() => showModal('create')} type="primary" className="bg-blue-500 font-bold py-2 px-4 pb-8 mt-2">
+                <Button onClick={handleCreateModal} type="primary" className="bg-blue-500 font-bold py-2 px-4 pb-8 mt-2">
                     Create Room
                 </Button>
             </div>
-            <div className={`flex mt-4 overflow-x-auto gap-3`}>
-                {rooms.map((room, index) => (
-                    <Card
-                        key={room.rid}
-                        style={{ minWidth: '25%', marginBottom: '8px' }}
-                        hoverable
-                        actions={[
-                            <EditOutlined key="edit" onClick={() => showModal('edit', room)} />,
-                            <DeleteOutlined key="delete" onClick={() => handleDeleteRoom(room.rid)} />,
-                            <SettingOutlined key="setting" />,
-                        ]}
-                    >
-                        <Meta
-                            avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
-                            title={room.name}
-                            description="This is the room description"
-                        />
-                    </Card>
-                ))}
-            </div>
-            <Modal title="Delete Room" visible={isDeleteModalVisible} onOk={handleConfirmDelete} onCancel={handleCancelDelete} okButtonProps={{ type: "primary", danger: true }}>
-                <p>Are you sure you want to delete this room?</p>
-            </Modal>
-            <Modal title={modalAction === 'edit' ? 'Edit Room' : 'Create Room'} visible={isModalVisible} onCancel={handleCancel} footer={null}>
-                {modalAction === 'edit' && selectedRoom && (
-                    <EditRoom room={selectedRoom} onCancel={handleCancel} accessToken={accessToken} onDataUpdated={handleRoomDataChange} />
-                )}
-                {modalAction === 'create' && (
-                    <CreateRoom accessToken={accessToken} onCancel={handleCancel} onCreate={handleRoomDataChange} homeSelect={homeSelect} />
-                )}
+            <ViewRoom homeSelect={homeSelect} accessToken={accessToken} dataChange={roomDataChanged} onChange={handleRoomDataChange} rooms={rooms} setRooms={setRooms}></ViewRoom>
+            <TheDevice rooms={rooms} accessToken={accessToken}></TheDevice>
+            <Modal
+                title="Create Room"
+                visible={createModalVisible}
+                onCancel={handleCancelCreateModal}
+                footer={null}
+            >
+                <CreateRoom homeSelect={homeSelect} accessToken={accessToken} onCreate={handleRoomDataChange} onCancel={handleCancelCreateModal} />
             </Modal>
             <Modal className='flex justify-center min-w-max' title="User in Home" visible={isUserInHomeVisible} onCancel={closeUserInHomePopup} footer={null}>
                 {homeSelect && <UserInHome homeSelect={homeSelect} accessToken={accessToken} />}
