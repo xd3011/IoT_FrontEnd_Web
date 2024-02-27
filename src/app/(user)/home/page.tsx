@@ -52,8 +52,7 @@ const TheHome: React.FC = () => {
                     else {
                         setHomes(data.homes.map((e: any) => ({ hid: e._id, name: e.home_name, address: e.address })));
                     }
-                }
-                else {
+                } else {
                     const data = await resHome.json();
                     message.error(data.error);
                 }

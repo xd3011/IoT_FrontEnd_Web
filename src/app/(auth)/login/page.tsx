@@ -46,9 +46,7 @@ export default function TheLogin() {
     const handleLogin = async (e: any) => {
         e.preventDefault();
         const valid = validation(user);
-        if (valid) {
-            return;
-        }
+        if (valid) return;
         try {
             const res = await fetch('http://localhost:5000/api/auth/login', {
                 method: 'POST',
@@ -116,7 +114,7 @@ export default function TheLogin() {
                                 Password
                             </label>
                             <div className="text-sm">
-                                <Link href="/forgot-password" passHref className="font-semibold text-indigo-600 hover:text-indigo-500">
+                                <Link href="/forgotpassword" passHref className="font-semibold text-indigo-600 hover:text-indigo-500">
                                     Forgot password?
                                 </Link>
                             </div>

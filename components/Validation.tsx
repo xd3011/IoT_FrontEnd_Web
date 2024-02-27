@@ -68,5 +68,15 @@ function isConfirmPassword(password: string, confirmPassword: string) {
     return { valid: true };
 }
 
+function isOTP(otp: string) {
+    // Check if OTP is a 6-digit number
+    const otpRegex: RegExp = /^\d{6}$/;
+    if (!otpRegex.test(otp)) {
+        return { error: 'OTP must be a 6-digit number' };
+    }
+    // If no errors, return an object with the 'valid' property set to 'true'
+    return { valid: true };
+}
+
 // Export all functions
-export { isUsername, isEmail, isPassword, isPhoneNumber, isConfirmPassword };
+export { isUsername, isEmail, isPassword, isPhoneNumber, isConfirmPassword, isOTP };
