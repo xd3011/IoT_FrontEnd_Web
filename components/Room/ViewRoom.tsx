@@ -81,7 +81,7 @@ const ViewRoom: React.FC<Props> = ({ homeSelect, accessToken, dataChange, onChan
 
     return (
         <div>
-            <div className={`flex mt-4 overflow-x-auto gap-3`}>
+            <div className={`flex mt-4 overflow-x-auto gap-3`} style={{ gap: '12px' }}>
                 {rooms.map((room) => (
                     <Card
                         key={room.rid}

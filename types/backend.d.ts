@@ -26,10 +26,15 @@ interface Device {
     mac_address: string;
     device_type: DeviceType | undefined;
     rid: string;
+    device_value: DeviceValue | undefined;
 }
 
 interface DeviceType {
     id: number;
     name: string;
     image: string;
+}
+
+interface DeviceValue {
+    value: string | undefined;
 }

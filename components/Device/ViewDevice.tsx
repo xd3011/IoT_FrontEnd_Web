@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import deviceTypes from '../../types/deviceTypes';
 import EditDevice from "../../components/Device/EditDevice";
+import ControlDevice from "../../components/Device/ControlDevice";
 
 const { Meta } = Card;
 
@@ -15,12 +16,11 @@ interface Props {
 }
 
 const ViewDevice: React.FC<Props> = ({ room, accessToken, dataChanged, onChange }) => {
-    console.log(room);
-
     const [devices, setDevices] = useState<Device[]>([]);
     const [selectedDevice, setSelectedDevice] = useState<Device | undefined>(undefined);
-    const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
-    const [deleteDeviceModalVisible, setDeleteDeviceModalVisible] = useState<boolean>(false);
+    const [controlModal, setControlModal] = useState<boolean>(false);
+    const [editModal, setEditModal] = useState<boolean>(false);
+    const [deleteModal, setDeleteModal] = useState<boolean>(false);
 
     const isRoomPath = usePathname().startsWith('/room/');
     const cardStyle = isRoomPath ? { flexBasis: '24%', marginBottom: '8px' } : { minWidth: '25%', marginBottom: '8px' };
@@ -34,7 +34,8 @@ const ViewDevice: React.FC<Props> = ({ room, accessToken, dataChanged, onChange 
                 gateway_code: device.gateway_code,
                 mac_address: device.mac_address,
                 device_type: device.device_type ? deviceTypes.find(type => type.id === device.device_type) : undefined,
-                rid: device.device_in_room
+                rid: device.device_in_room,
+                device_value: device.device_value
             })
         });
     };
@@ -69,7 +70,11 @@ const ViewDevice: React.FC<Props> = ({ room, accessToken, dataChanged, onChange 
     }, [dataChanged, room]);
 
     const handleCancelEditModal = () => {
-        setEditModalVisible(false);
+        setEditModal(false);
+    };
+
+    const handleCancelControlModal = () => {
+        setControlModal(false);
     };
 
     const handleDelete = async () => {
@@ -91,7 +96,7 @@ const ViewDevice: React.FC<Props> = ({ room, accessToken, dataChanged, onChange 
         } catch (error) {
             console.error('Error deleting device:', error);
         }
-        setDeleteDeviceModalVisible(false);
+        setDeleteModal(false);
     };
 
     const handleDeviceDataChange = () => {
@@ -103,52 +108,65 @@ const ViewDevice: React.FC<Props> = ({ room, accessToken, dataChanged, onChange 
             <div className="mt-3 ml-2 font-medium text-lg">
                 <h2>{room.name}</h2>
             </div>
-            <div className={`flex mt-4 overflow-x-auto gap-3 ${usePathname().startsWith('/room/') ? 'flex-wrap' : ''}`}>
+            <div className={`flex mt-4 overflow-x-auto gap-3 ${usePathname().startsWith('/room/') ? 'flex-wrap' : ''}`} style={{ gap: '12px' }}>
                 {devices.map((device) => (
                     <Card
                         key={device.did}
                         style={cardStyle}
-                        cover={
-                            <img
-                                alt="example"
-                                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                            />
-                        }
                         hoverable
                         actions={[
                             <EditOutlined key="edit" onClick={() => {
                                 setSelectedDevice(device);
-                                setEditModalVisible(true);
+                                setEditModal(true);
                             }} />,
                             <DeleteOutlined key="delete" onClick={() => {
                                 setSelectedDevice(device);
-                                setDeleteDeviceModalVisible(true);
+                                setDeleteModal(true);
                             }} />,
                             <SettingOutlined key="setting" onClick={() => {
                                 console.log("123");
                             }} />,
                         ]}
                     >
-                        <Meta
-                            title={device.device_name}
-                            description={device.did}
-                        />
+                        <div onClick={() => {
+                            setSelectedDevice(device);
+                            setControlModal(true);
+                        }}>
+                            <img
+                                alt="example"
+                                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                            />
+                            <Meta
+                                style={{ marginTop: '10px' }}
+                                title={device.device_name}
+                                description={device.did}
+                            />
+                        </div>
                     </Card>
                 ))}
             </div>
             <Modal
                 title="Edit Device"
-                visible={editModalVisible}
+                visible={editModal}
                 onCancel={handleCancelEditModal}
                 footer={null}
             >
                 {selectedDevice && <EditDevice device={selectedDevice} accessToken={accessToken} onDataUpdated={handleDeviceDataChange} onCancel={handleCancelEditModal} />}
             </Modal>
             <Modal
+                title="Control Device"
+                visible={controlModal}
+                onCancel={handleCancelControlModal}
+                footer={null}
+            >
+                {selectedDevice && <ControlDevice device={selectedDevice} accessToken={accessToken} />}
+                {/* onDataUpdated={handleDeviceDataChange} onCancel={handleCancelEditModal} */}
+            </Modal>
+            <Modal
                 title="Delete Device"
-                visible={deleteDeviceModalVisible}
+                visible={deleteModal}
                 onOk={() => handleDelete()}
-                onCancel={() => setDeleteDeviceModalVisible(false)}
+                onCancel={() => setDeleteModal(false)}
                 okButtonProps={{ type: "primary", danger: true }}
             >
                 <p>Are you sure you want to delete this device?</p>
