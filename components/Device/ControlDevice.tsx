@@ -17,17 +17,34 @@ const ControlDevice: React.FC<Props> = ({ device, accessToken }) => {
         setValue(device.device_value);
     }, [])
 
+    const [switchState, setSwitchState] = useState(true);
+
+    const handleSwitchChange = () => {
+        setSwitchState(!switchState);
+        if (switchState) {
+            console.log("Switch is OFF", switchState);
+        } else {
+            console.log("Switch is ON", switchState);
+        }
+    };
+
     return (
-        <div className="flex flex-col items-center justify-center h-full">
+        <div className="flex flex-col items-start h-full">
             <h2 className="text-xl font-semibold mb-2">{name}</h2>
             <h3 className="text-lg mb-2">{type?.name}</h3>
             <h3 className="text-lg mb-4">{value?.value}</h3>
-            <Switch
-                checkedChildren="ON"
-                unCheckedChildren="OFF"
-                defaultChecked
-                className='scale-[5]'
-            />
+            <div style={{ textAlign: 'center', margin: '0 auto' }}>
+                <Switch
+                    style={{
+                        transform: 'scale(1.75)',
+                        backgroundColor: switchState ? '' : '#8c8c8c'
+                    }}
+                    checked={switchState}
+                    onChange={handleSwitchChange}
+                    checkedChildren="ON"
+                    unCheckedChildren="OFF"
+                />
+            </div>
         </div>
     );
 }

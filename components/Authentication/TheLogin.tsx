@@ -57,12 +57,13 @@ export default function TheLogin() {
             });
             if (res.ok) {
                 const data = await res.json();
-                const time: number = Date.now() + 24 * 60 * 60 * 1000; // 1 ngày trong milliseconds
+                const time: number = Date.now() + 24 * 60 * 60 * 1000;
                 localStorage.setItem('tokenTime', time.toString());
                 localStorage.setItem('accessToken', data.accessToken);
                 localStorage.setItem('refreshToken', data.refreshToken);
                 localStorage.setItem('indexToken', data.indexToken);
                 localStorage.setItem('uid', data.uid);
+                localStorage.setItem('admin', data.isAdmin);
                 message.success(data.message);
                 router.push('/room');
             } else {

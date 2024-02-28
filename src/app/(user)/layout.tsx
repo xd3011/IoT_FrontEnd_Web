@@ -108,6 +108,7 @@ export default function RootLayout({
       localStorage.removeItem('tokenTime');
       localStorage.removeItem('indexToken');
       localStorage.removeItem('uid');
+      localStorage.removeItem('admin');
       message.success(data.message);
       router.push('/login');
     } else {
