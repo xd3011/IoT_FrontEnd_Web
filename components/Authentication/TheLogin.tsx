@@ -61,6 +61,7 @@ export default function TheLogin() {
                 localStorage.setItem('tokenTime', time.toString());
                 localStorage.setItem('accessToken', data.accessToken);
                 localStorage.setItem('refreshToken', data.refreshToken);
+                localStorage.setItem('indexToken', data.indexToken);
                 localStorage.setItem('uid', data.uid);
                 message.success(data.message);
                 router.push('/room');

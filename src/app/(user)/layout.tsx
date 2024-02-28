@@ -93,16 +93,20 @@ export default function RootLayout({
   };
 
   const handleLogout = async () => {
+    let indexToken = localStorage.getItem('indexToken');
     const res = await fetch(`http://localhost:5000/api/auth/logout/${uid}`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({ indexToken: indexToken }),
     });
     if (res.ok) {
       const data = await res.json();
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      localStorage.removeItem('tokenTime');
+      localStorage.removeItem('indexToken');
       localStorage.removeItem('uid');
       message.success(data.message);
       router.push('/login');
