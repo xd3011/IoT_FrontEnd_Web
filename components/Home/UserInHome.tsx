@@ -212,7 +212,6 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
                 />
             )}
             <Modal
-                className='abc'
                 title="Confirm Delete"
                 visible={confirmDeleteVisible}
                 onOk={handleConfirmDelete}
