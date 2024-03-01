@@ -17,6 +17,7 @@ interface User {
     address: string;
     phone: string;
     email: string;
+    roll: string;
 }
 
 interface Device {

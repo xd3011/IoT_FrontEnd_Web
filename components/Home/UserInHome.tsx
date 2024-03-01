@@ -20,13 +20,13 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
     const [selectedUserId, setSelectedUserId] = useState<string>("");
 
     const columns: GridColDef[] = [
-        { field: 'index', headerName: 'ID', width: 70 },
+        { field: 'index', headerName: '#', width: 70 },
         { field: 'name', headerName: 'Name', width: 130 },
         { field: 'age', headerName: 'Age', type: 'number', width: 90 },
         { field: 'gender', headerName: 'Gender', width: 90 },
         { field: 'address', headerName: 'Address', width: 150 },
         { field: 'phone', headerName: 'Phone', width: 120 },
-        { field: 'email', headerName: 'Email', width: 200 },
+        { field: 'email', headerName: 'Email', width: 250 },
     ];
 
     if (admin) {
