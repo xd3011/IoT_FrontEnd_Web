@@ -11,7 +11,7 @@ const App: React.FC = () => {
     const router = useRouter();
     const [users, setUsers] = useState<User[]>([]);
     const [reload, setReload] = useState<boolean>(false);
-    const [userSelect, setUserSelect] = useState<User | null>(null);
+    const [userSelect, setUserSelect] = useState<User>();
 
     const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState<boolean>(false);
@@ -94,7 +94,11 @@ const App: React.FC = () => {
                     >
                         <Button icon={<EditOutlined />} />
                     </Dropdown>
-                    <Button danger onClick={() => handleDelete(record)} icon={<DeleteOutlined />} />
+                    <Button danger onClick={() => {
+                        setUserSelect(record);
+                        setDeleteModalVisible(true);
+                        console.log(`Delete user ${record.name}`);
+                    }} icon={<DeleteOutlined />} />
                 </Space>
             ),
         },
@@ -156,15 +160,39 @@ const App: React.FC = () => {
         if (key === 'editUser') {
             setUserSelect(record);
             setEditModalVisible(true);
-            console.log(`Edit user ${record.name}`);
         } else if (key === 'changeRole') {
             console.log(`Change role for user ${record.name}`);
         }
     };
 
-    const handleDelete = (record: User) => {
-        setUserSelect(record);
-        console.log(`Delete user ${record.name}`);
+
+
+    const handleDelete = async () => {
+        try {
+            const res = await fetch(`http://localhost:5000/api/user/`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': accessToken,
+                },
+                body: JSON.stringify({ uid: userSelect?.uid })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (!data.error) {
+                    message.success(data.message);
+                    setReload(prev => !prev);
+                } else {
+                    message.error(data.error);
+                }
+            } else {
+                console.error('Failed to delete user');
+            }
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        } finally {
+            setDeleteModalVisible(false);
+        }
     };
 
     const handleCancelEditModal = () => {
@@ -179,12 +207,21 @@ const App: React.FC = () => {
         <div>
             <Table columns={columns} dataSource={users} />
             <Modal
-                title="Edit Room"
+                title="Edit User"
                 visible={editModalVisible}
                 onCancel={handleCancelEditModal}
                 footer={null}
             >
                 {userSelect && <EditUser user={userSelect} accessToken={accessToken} onDataUpdated={handleDataUpdate} onCancel={handleCancelEditModal} />}
+            </Modal>
+            <Modal
+                title="Delete User"
+                visible={deleteModalVisible}
+                onOk={() => handleDelete()}
+                onCancel={() => setDeleteModalVisible(false)}
+                okButtonProps={{ type: "primary", danger: true }}
+            >
+                <p>Are you sure you want to delete user?</p>
             </Modal>
         </div>
     )
