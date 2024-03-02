@@ -175,7 +175,6 @@ export default function UserInHome({ homeSelect, accessToken }: UserInHomeProps)
         setconfirmDeleteVisible(false);
     };
 
-
     return (
         <div>
             <div className="flex justify-between mb-4">

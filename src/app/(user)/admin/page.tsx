@@ -14,6 +14,7 @@ const App: React.FC = () => {
     const [userSelect, setUserSelect] = useState<User>();
 
     const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
+    const [changeModalVisible, setChangeModalVisible] = useState<boolean>(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState<boolean>(false);
     let admin: number;
     let accessToken: string;
@@ -161,11 +162,10 @@ const App: React.FC = () => {
             setUserSelect(record);
             setEditModalVisible(true);
         } else if (key === 'changeRole') {
-            console.log(`Change role for user ${record.name}`);
+            setUserSelect(record);
+            setChangeModalVisible(true);
         }
     };
-
-
 
     const handleDelete = async () => {
         try {
@@ -195,6 +195,35 @@ const App: React.FC = () => {
         }
     };
 
+    const handleChange = async () => {
+        try {
+            const res = await fetch(`http://localhost:5000/api/user/changeUserToAdmin`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': accessToken,
+                },
+                body: JSON.stringify({ uid: userSelect?.uid })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (!data.error) {
+                    message.success(data.message);
+                    setReload(prev => !prev);
+                } else {
+                    message.error(data.error);
+                }
+            } else {
+                const data = await res.json();
+                message.error(data.error);
+            }
+        } catch (error) {
+            console.error('Error change role to admin:', error);
+        } finally {
+            setChangeModalVisible(false);
+        }
+    }
+
     const handleCancelEditModal = () => {
         setEditModalVisible(false);
     };
@@ -213,6 +242,15 @@ const App: React.FC = () => {
                 footer={null}
             >
                 {userSelect && <EditUser user={userSelect} accessToken={accessToken} onDataUpdated={handleDataUpdate} onCancel={handleCancelEditModal} />}
+            </Modal>
+            <Modal
+                title="Change Role To Admin"
+                visible={changeModalVisible}
+                onOk={() => handleChange()}
+                onCancel={() => setChangeModalVisible(false)}
+                okButtonProps={{ type: "primary", className: "bg-blue-500" }}
+            >
+                <p>Are you sure you want to change role user to admin?</p>
             </Modal>
             <Modal
                 title="Delete User"
