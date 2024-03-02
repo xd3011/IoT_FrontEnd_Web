@@ -15,7 +15,8 @@ const App: React.FC = () => {
     const [userSelect, setUserSelect] = useState<User>();
 
     const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
-    const [changeModalVisible, setChangeModalVisible] = useState<boolean>(false);
+    const [changeAdminModalVisible, setChangeAdminModalVisible] = useState<boolean>(false);
+    const [changeUserModalVisible, setChangeUserModalVisible] = useState<boolean>(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState<boolean>(false);
     const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
     let admin: number;
@@ -81,6 +82,7 @@ const App: React.FC = () => {
             title: 'Role',
             dataIndex: 'role',
             key: 'role',
+            render: (text) => text.charAt(0).toUpperCase() + text.slice(1),
         },
         {
             title: 'Action',
@@ -91,7 +93,8 @@ const App: React.FC = () => {
                         overlay={
                             <Menu onClick={(e) => handleEdit(e, record)}>
                                 <Menu.Item key="editUser">Edit User</Menu.Item>
-                                <Menu.Item key="changeRole">Change Role</Menu.Item>
+                                <Menu.Item key="changeAdminRole">Change Role To Admin</Menu.Item>
+                                <Menu.Item key="changeUserRole">Change Role To User</Menu.Item>
                             </Menu>
                         }
                     >
@@ -100,7 +103,6 @@ const App: React.FC = () => {
                     <Button danger onClick={() => {
                         setUserSelect(record);
                         setDeleteModalVisible(true);
-                        console.log(`Delete user ${record.name}`);
                     }} icon={<DeleteOutlined />} />
                 </Space>
             ),
@@ -160,12 +162,13 @@ const App: React.FC = () => {
 
     const handleEdit = (e: any, record: User) => {
         const key = e.key;
+        setUserSelect(record);
         if (key === 'editUser') {
-            setUserSelect(record);
             setEditModalVisible(true);
-        } else if (key === 'changeRole') {
-            setUserSelect(record);
-            setChangeModalVisible(true);
+        } else if (key === 'changeAdminRole') {
+            setChangeAdminModalVisible(true);
+        } else if (key === 'changeUserRole') {
+            setChangeUserModalVisible(true);
         }
     };
 
@@ -197,7 +200,7 @@ const App: React.FC = () => {
         }
     };
 
-    const handleChange = async () => {
+    const handleChangeAdmin = async () => {
         try {
             const res = await fetch(`http://localhost:5000/api/user/changeUserToAdmin`, {
                 method: 'PUT',
@@ -222,7 +225,36 @@ const App: React.FC = () => {
         } catch (error) {
             console.error('Error change role to admin:', error);
         } finally {
-            setChangeModalVisible(false);
+            setChangeAdminModalVisible(false);
+        }
+    }
+
+    const handleChangeUser = async () => {
+        try {
+            const res = await fetch(`http://localhost:5000/api/user/changeRoleToUser`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': accessToken,
+                },
+                body: JSON.stringify({ uid: userSelect?.uid })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (!data.error) {
+                    message.success(data.message);
+                    setReload(prev => !prev);
+                } else {
+                    message.error(data.error);
+                }
+            } else {
+                const data = await res.json();
+                message.error(data.error);
+            }
+        } catch (error) {
+            console.error('Error change role to user:', error);
+        } finally {
+            setChangeUserModalVisible(false);
         }
     }
 
@@ -266,12 +298,21 @@ const App: React.FC = () => {
             </Modal>
             <Modal
                 title="Change Role To Admin"
-                visible={changeModalVisible}
-                onOk={() => handleChange()}
-                onCancel={() => setChangeModalVisible(false)}
+                visible={changeAdminModalVisible}
+                onOk={() => handleChangeAdmin()}
+                onCancel={() => setChangeAdminModalVisible(false)}
                 okButtonProps={{ type: "primary", className: "bg-blue-500" }}
             >
                 <p>Are you sure you want to change role user to admin?</p>
+            </Modal>
+            <Modal
+                title="Change Role To User"
+                visible={changeUserModalVisible}
+                onOk={() => handleChangeUser()}
+                onCancel={() => setChangeUserModalVisible(false)}
+                okButtonProps={{ type: "primary", className: "bg-blue-500" }}
+            >
+                <p>Are you sure you want to change role admin to user?</p>
             </Modal>
             <Modal
                 title="Delete User"
