@@ -1,10 +1,11 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { Space, Table, message, Button, Dropdown, Menu, Modal } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, UserOutlined } from '@ant-design/icons';
 import type { TableProps } from 'antd';
 import { useRouter } from 'next/navigation';
 import EditUser from "../../../../components/User/EditUser";
+import CreateAdminAccount from "../../../../components/User/CreateAdminAccount";
 
 
 const App: React.FC = () => {
@@ -16,6 +17,7 @@ const App: React.FC = () => {
     const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
     const [changeModalVisible, setChangeModalVisible] = useState<boolean>(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState<boolean>(false);
+    const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
     let admin: number;
     let accessToken: string;
 
@@ -232,9 +234,28 @@ const App: React.FC = () => {
         setReload(prev => !prev);
     }
 
+    const handleCreateAdmin = () => {
+        setCreateModalVisible(true);
+    };
+
+    const handleCancelCreateModal = () => {
+        setCreateModalVisible(false);
+    }
+
     return (
         <div>
+            <Button onClick={handleCreateAdmin} type="primary" className="bg-blue-500 font-bold py-2 px-4 pb-8 ml-4 h-10 mt-2 mb-2" icon={<UserOutlined />}>
+                Create Admin Account
+            </Button>
             <Table columns={columns} dataSource={users} />
+            <Modal
+                title="Create Admin Account"
+                visible={createModalVisible}
+                onCancel={handleCancelCreateModal}
+                footer={null}
+            >
+                <CreateAdminAccount accessToken={accessToken} onDataCreated={handleDataUpdate} onCancel={handleCancelCreateModal} />
+            </Modal>
             <Modal
                 title="Edit User"
                 visible={editModalVisible}
