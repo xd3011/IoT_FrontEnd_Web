@@ -1,4 +1,4 @@
-import TheLogin from "../../../../components/Authentication/TheLogin";
+import TheLogin from "../../../components/Authentication/TheLogin";
 
 export const metadata = {
     title: 'Login Home IoT',

@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Avatar, Card, Modal, Button, message } from 'antd';
 import { EditOutlined, SettingOutlined, DeleteOutlined } from '@ant-design/icons';
-import CreateHome from "../../../../components/Home/CreateHome";
-import EditHome from "../../../../components/Home/EditHome";
+import CreateHome from "../../../components/Home/CreateHome";
+import EditHome from "../../../components/Home/EditHome";
 
 const { Meta } = Card;
 

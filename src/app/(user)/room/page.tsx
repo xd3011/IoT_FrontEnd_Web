@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 import { UserOutlined } from '@ant-design/icons';
 import { Modal, Button, message } from 'antd';
-import HomeList from "../../../../components/HomeList";
-import UserInHome from "../../../../components/Home/UserInHome";
-import ViewRoom from "../../../../components/Room/ViewRoom";
-import CreateRoom from "../../../../components/Room/CreateRoom";
-import TheDevice from '../../../../components/Device/TheDevice';
+import HomeList from "../../../components/HomeList";
+import UserInHome from "../../../components/Home/UserInHome";
+import ViewRoom from "../../../components/Room/ViewRoom";
+import CreateRoom from "../../../components/Room/CreateRoom";
+import TheDevice from '../../../components/Device/TheDevice';
 
 const TheRoom: React.FC = () => {
     const router = useRouter();

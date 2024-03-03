@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from "next/navigation";
 import { message } from 'antd';
-import { isPassword, isConfirmPassword } from '../../../../components/Validation';
+import { isPassword, isConfirmPassword } from '../../../components/Validation';
 
 export default function ChangePassword() {
     const router = useRouter();

@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link';
 import React, { useState } from 'react';
-import * as Validators from "@/../components/Validation";
+import * as Validators from "@/components/Validation";
 import { message } from 'antd';
 
 export default function TheForgotPassword() {

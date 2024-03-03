@@ -2,9 +2,9 @@ import { Card, Modal, message } from "antd";
 import { EditOutlined, DeleteOutlined, SettingOutlined } from '@ant-design/icons';
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import deviceTypes from '../../types/deviceTypes';
-import EditDevice from "../../components/Device/EditDevice";
-import ControlDevice from "../../components/Device/ControlDevice";
+import deviceTypes from '../../../types/deviceTypes';
+import EditDevice from "./EditDevice";
+import ControlDevice from "./ControlDevice";
 
 const { Meta } = Card;
 

@@ -1,4 +1,4 @@
-import TheForgotPassword from "../../../../components/Authentication/TheForgotPassword";
+import TheForgotPassword from "../../../components/Authentication/TheForgotPassword";
 
 export const metadata = {
     title: 'Forgot Password Home IoT',

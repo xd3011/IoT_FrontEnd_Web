@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, message, Select } from 'antd';
-import deviceTypes from '../../types/deviceTypes';
+import deviceTypes from '../../../types/deviceTypes';
 
 const { Option } = Select;
 

@@ -2,7 +2,7 @@
 import { message } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import ViewDevice from "../../../../../components/Device/ViewDevice";
+import ViewDevice from "../../../../components/Device/ViewDevice";
 
 const TheRoomPage: React.FC = (props: any) => {
     const router = useRouter();

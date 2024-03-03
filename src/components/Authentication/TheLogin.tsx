@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import Link from 'next/link';
 import { useState } from 'react';
 import { message } from "antd";
-import * as Validators from '@/../components/Validation';
+import * as Validators from '@/components/Validation';
 
 export default function TheLogin() {
     const router = useRouter();

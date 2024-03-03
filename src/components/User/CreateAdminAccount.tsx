@@ -1,6 +1,6 @@
 import { Button, Form, Input, message } from "antd";
 import { useState } from "react";
-import * as Validators from '@/../components/Validation';
+import * as Validators from '@/components/Validation';
 
 interface Props {
     accessToken: string;

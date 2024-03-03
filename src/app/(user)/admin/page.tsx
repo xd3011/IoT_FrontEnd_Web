@@ -1,12 +1,14 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { Space, Table, message, Button, Dropdown, Menu, Modal } from 'antd';
+import { Space, Table, message, Button, Dropdown, Menu, Modal, Input } from 'antd';
 import { DeleteOutlined, EditOutlined, UserOutlined } from '@ant-design/icons';
 import type { TableProps } from 'antd';
 import { useRouter } from 'next/navigation';
-import EditUser from "../../../../components/User/EditUser";
-import CreateAdminAccount from "../../../../components/User/CreateAdminAccount";
+import EditUser from "../../../components/User/EditUser";
+import CreateAdminAccount from "../../../components/User/CreateAdminAccount";
+import type { SearchProps } from 'antd/es/input/Search';
 
+const { Search } = Input;
 
 const App: React.FC = () => {
     const router = useRouter();
@@ -19,8 +21,15 @@ const App: React.FC = () => {
     const [changeUserModalVisible, setChangeUserModalVisible] = useState<boolean>(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState<boolean>(false);
     const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
+    const [searchValue, setSearchValue] = useState<string>('');
     let admin: number;
     let accessToken: string;
+
+    const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
+
+    const handleTableChange = (pagination: any) => {
+        setPagination(pagination);
+    };
 
     if (typeof localStorage !== 'undefined') {
         admin = parseInt(localStorage.getItem('admin') || '0', 10);
@@ -109,11 +118,9 @@ const App: React.FC = () => {
         },
     ];
 
-
-
     const fetchUsers = async () => {
         try {
-            const resUsers = await fetch(`http://localhost:5000/api/user/`, {
+            const resUsers = await fetch(`http://localhost:5000/api/user/?search=${searchValue}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -146,7 +153,7 @@ const App: React.FC = () => {
                             index: index + 1,
                         };
                     });
-                    setUsers(mappedUsers);
+                    await setUsers(mappedUsers);
                 }
             } else {
                 console.error('Failed to fetch users');
@@ -158,7 +165,7 @@ const App: React.FC = () => {
 
     useEffect(() => {
         fetchUsers();
-    }, [reload]);
+    }, [reload, searchValue]);
 
     const handleEdit = (e: any, record: User) => {
         const key = e.key;
@@ -274,12 +281,26 @@ const App: React.FC = () => {
         setCreateModalVisible(false);
     }
 
+    const handleSearch = async (e: any) => {
+        console.log(e.target.value);
+        await setSearchValue(e.target.value);
+    }
+
+    const onSearch: SearchProps['onSearch'] = () => {
+        handleDataUpdate();
+    }
     return (
         <div>
-            <Button onClick={handleCreateAdmin} type="primary" className="bg-blue-500 font-bold py-2 px-4 pb-8 ml-4 h-10 mt-2 mb-2" icon={<UserOutlined />}>
-                Create Admin Account
-            </Button>
-            <Table columns={columns} dataSource={users} />
+            <div className="flex items-center">
+                <Button onClick={handleCreateAdmin} type="primary" className="bg-blue-500 font-bold py-2 px-4 pb-8 ml-4 h-10 mt-2 mb-2" icon={<UserOutlined />}>
+                    Create Admin Account
+                </Button>
+                <div className="ml-auto">
+                    <Search placeholder="input search text" onChange={handleSearch} onSearch={onSearch} enterButton className="rounded-lg bg-blue-500" />
+                </div>
+            </div>
+            <Table columns={columns} dataSource={users} pagination={pagination}
+                onChange={handleTableChange} />
             <Modal
                 title="Create Admin Account"
                 visible={createModalVisible}
