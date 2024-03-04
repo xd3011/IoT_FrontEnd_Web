@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import deviceTypes from '../../../types/deviceTypes';
 import EditDevice from "./EditDevice";
-import ControlDevice from "./ControlDevice";
+import ControlLightDevice from "./ControlLightDevice";
+import ViewSensorDevice from "./ViewSensorDevice";
 
 const { Meta } = Card;
 
@@ -17,14 +18,14 @@ interface Props {
 
 const ViewDevice: React.FC<Props> = ({ room, accessToken, dataChanged, onChange }) => {
     const [devices, setDevices] = useState<Device[]>([]);
-    const [selectedDevice, setSelectedDevice] = useState<Device | undefined>(undefined);
+    const [selectedDevice, setSelectedDevice] = useState<Device>();
     const [controlModal, setControlModal] = useState<boolean>(false);
+    const [viewSensorDevice, setViewSensorDevice] = useState<boolean>(false);
     const [editModal, setEditModal] = useState<boolean>(false);
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
 
     const isRoomPath = usePathname().startsWith('/room/');
     const cardStyle = isRoomPath ? { flexBasis: '24%', marginBottom: '8px' } : { minWidth: '25%', marginBottom: '8px' };
-
 
     const convertToDevice = (data: any[]): Device[] => {
         return data.map(device => {
@@ -33,9 +34,9 @@ const ViewDevice: React.FC<Props> = ({ room, accessToken, dataChanged, onChange 
                 device_name: device.device_name,
                 gateway_code: device.gateway_code,
                 mac_address: device.mac_address,
-                device_type: device.device_type ? deviceTypes.find(type => type.id === device.device_type) : undefined,
+                device_type: deviceTypes.deviceTypes.find(type => type.id === device.device_type),
                 rid: device.device_in_room,
-                device_value: device.device_value
+                device_data: device.device_data
             })
         });
     };
@@ -75,6 +76,10 @@ const ViewDevice: React.FC<Props> = ({ room, accessToken, dataChanged, onChange 
 
     const handleCancelControlModal = () => {
         setControlModal(false);
+    };
+
+    const handleCancelViewSensor = () => {
+        setViewSensorDevice(false);
     };
 
     const handleDelete = async () => {
@@ -130,16 +135,22 @@ const ViewDevice: React.FC<Props> = ({ room, accessToken, dataChanged, onChange 
                     >
                         <div onClick={() => {
                             setSelectedDevice(device);
-                            setControlModal(true);
+                            if (device.device_type?.id === 0) {
+                                setControlModal(true);
+                            }
+                            if (device.device_type?.id === 1) {
+                                setViewSensorDevice(true);
+                            }
                         }}>
                             <img
+                                className="w-full"
                                 alt="example"
                                 src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
                             />
                             <Meta
                                 style={{ marginTop: '10px' }}
                                 title={device.device_name}
-                                description={device.did}
+                                description={device.device_type?.name}
                             />
                         </div>
                     </Card>
@@ -159,8 +170,15 @@ const ViewDevice: React.FC<Props> = ({ room, accessToken, dataChanged, onChange 
                 onCancel={handleCancelControlModal}
                 footer={null}
             >
-                {selectedDevice && <ControlDevice device={selectedDevice} accessToken={accessToken} />}
-                {/* onDataUpdated={handleDeviceDataChange} onCancel={handleCancelEditModal} */}
+                {selectedDevice && <ControlLightDevice device={selectedDevice} accessToken={accessToken} />}
+            </Modal>
+            <Modal
+                title="View Sensor Device"
+                visible={viewSensorDevice}
+                onCancel={handleCancelViewSensor}
+                footer={null}
+            >
+                {selectedDevice && <ViewSensorDevice device={selectedDevice} accessToken={accessToken} />}
             </Modal>
             <Modal
                 title="Delete Device"

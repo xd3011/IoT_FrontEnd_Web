@@ -3,4 +3,9 @@ const deviceTypes: DeviceType[] = [
     { id: 1, name: "Sensor", image: "/img/logo2.jpg" },
 ];
 
-export default deviceTypes;
+const deviceLightValue = [
+    { id: 0, name: "OFF" },
+    { id: 1, name: "ON" },
+];
+
+export default { deviceTypes, deviceLightValue };

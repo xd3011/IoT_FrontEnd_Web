@@ -27,7 +27,7 @@ interface Device {
     mac_address: string;
     device_type: DeviceType | undefined;
     rid: string;
-    device_value: DeviceValue | undefined;
+    device_data: DeviceData;
 }
 
 interface DeviceType {
@@ -36,6 +36,6 @@ interface DeviceType {
     image: string;
 }
 
-interface DeviceValue {
-    value: string | undefined;
+interface DeviceData {
+    value: number | undefined;
 }
