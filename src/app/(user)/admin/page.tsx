@@ -36,7 +36,7 @@ const App: React.FC = () => {
         accessToken = localStorage.getItem('accessToken') || '';
         if (admin !== 1) {
             console.error('User is not admin');
-            router.push('/room');
+            router.push('/home');
             return;
         }
         if (!accessToken) {

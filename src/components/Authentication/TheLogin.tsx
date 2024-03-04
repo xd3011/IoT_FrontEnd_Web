@@ -65,7 +65,7 @@ export default function TheLogin() {
                 localStorage.setItem('uid', data.uid);
                 localStorage.setItem('admin', data.isAdmin);
                 message.success(data.message);
-                router.push('/room');
+                router.push('/home');
             } else {
                 const data = await res.json();
                 message.error(data.error);

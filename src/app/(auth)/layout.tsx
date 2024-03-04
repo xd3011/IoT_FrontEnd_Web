@@ -11,7 +11,7 @@ export default function RootLayout({
   if (typeof localStorage !== 'undefined') {
     uid = localStorage.getItem('uid') || '';
     if (uid) {
-      router.push('/room');
+      router.push('/home');
     }
   }
   return (

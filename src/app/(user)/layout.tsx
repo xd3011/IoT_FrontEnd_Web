@@ -60,9 +60,9 @@ export default function RootLayout({
   const setSelectedDefault = () => {
     const pathname = usePathname().split('/');
     switch (pathname[1]) {
-      case 'home':
+      case 'home-user':
         return ['1'];
-      case 'room':
+      case 'home':
         return ['2'];
       default:
         return ['0'];
@@ -131,13 +131,13 @@ export default function RootLayout({
                 key: '1',
                 icon: <MenuFoldOutlined />,
                 label: 'Home User',
-                onClick: () => router.push('/home'),
+                onClick: () => router.push('/home-user'),
               },
               {
                 key: '2',
                 icon: <HomeOutlined />,
                 label: 'Home',
-                onClick: () => router.push('/room'),
+                onClick: () => router.push('/home'),
               },
               {
                 key: '3',
