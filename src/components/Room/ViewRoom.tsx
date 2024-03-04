@@ -54,6 +54,22 @@ const ViewRoom: React.FC<Props> = ({ homeSelect, accessToken, dataChange, onChan
 
     const handleDelete = async () => {
         try {
+            // Delete Device In Room
+            const devicesRes = await fetch(`http://localhost:5000/api/device/deleteAllInRoom`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': accessToken,
+                },
+                body: JSON.stringify({ rid: selectedRoom?.rid })
+            });
+
+            if (!devicesRes.ok) {
+                const errorData = await devicesRes.json();
+                throw new Error(errorData.error);
+            }
+
+            // Delete Room
             const res = await fetch(`http://localhost:5000/api/room/${selectedRoom?.rid}`, {
                 method: 'DELETE',
                 headers: {

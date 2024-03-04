@@ -65,6 +65,55 @@ const TheHome: React.FC = () => {
 
     const handleDelete = async (hid: string) => {
         try {
+            // Get Room Id from Home  
+            const roomsRes = await fetch(`http://localhost:5000/api/room/${hid}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': accessToken,
+                },
+            });
+
+            if (!roomsRes.ok) {
+                const errorData = await roomsRes.json();
+                throw new Error(errorData.error);
+            }
+            const roomsData = await roomsRes.json();
+            const roomIds = roomsData.rooms.map((room: any) => room._id);
+
+            // Delete Device in Room
+            for (const roomId of roomIds) {
+                const devicesRes = await fetch(`http://localhost:5000/api/device/deleteAllInRoom`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': accessToken,
+                    },
+                    body: JSON.stringify({ rid: roomId })
+                });
+
+                if (!devicesRes.ok) {
+                    const errorData = await devicesRes.json();
+                    throw new Error(errorData.error);
+                }
+            }
+
+            // Delete Room In Home
+            const roomRes = await fetch(`http://localhost:5000/api/room/deleteRoomInHome`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': accessToken,
+                },
+                body: JSON.stringify({ hid: hid })
+            });
+
+            if (!roomRes.ok) {
+                const errorData = await roomRes.json();
+                throw new Error(errorData.error);
+            }
+
+            // Delete Home
             const res = await fetch(`http://localhost:5000/api/home/${hid}`, {
                 method: 'DELETE',
                 headers: {

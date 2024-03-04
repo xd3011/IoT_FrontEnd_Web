@@ -118,11 +118,11 @@ const CreateDevice: React.FC<Props> = ({ rooms, accessToken, onCreate, onCancel 
                     className="w-full"
                     value={deviceType ? deviceType.name : undefined}
                     onChange={(value) => {
-                        const selectedDeviceType = deviceTypes.find(type => type.name === value);
+                        const selectedDeviceType = deviceTypes.deviceTypes.find(type => type.name === value);
                         setDeviceType(selectedDeviceType);
                     }}
                 >
-                    {deviceTypes.map((type) => (
+                    {deviceTypes.deviceTypes.map((type) => (
                         <Option key={type.name} value={type.name}>
                             {type.name}
                         </Option>
