@@ -111,7 +111,7 @@ const TheRoom: React.FC = () => {
                 </Button>
             </div>
             <ViewRoom homeSelect={homeSelect} accessToken={accessToken} dataChange={roomDataChanged} onChange={handleRoomDataChange} rooms={rooms} setRooms={setRooms}></ViewRoom>
-            <TheDevice hid={homeSelect} accessToken={accessToken}></TheDevice>
+            <TheDevice hid={homeSelect} accessToken={accessToken} rooms={rooms}></TheDevice>
             <Modal
                 title="Create Room"
                 visible={createModalVisible}

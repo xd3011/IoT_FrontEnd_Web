@@ -82,6 +82,7 @@ const TheRoomPage: React.FC = (props: any) => {
                 onCancel={handleCancelAddModal}
                 footer={null}
                 className="min-h-max"
+
             >
                 <AddDeviceInRoom rid={rid} hid={homeSelect} accessToken={accessToken} onAdd={handleDeviceDataChange} onCancel={handleCancelAddModal} />
             </Modal>

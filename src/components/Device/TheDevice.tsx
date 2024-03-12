@@ -7,9 +7,10 @@ import ViewDevice from "./ViewDevice";
 interface Props {
     hid: string;
     accessToken: string;
+    rooms: Room[];
 }
 
-const TheDevice: React.FC<Props> = ({ hid, accessToken }) => {
+const TheDevice: React.FC<Props> = ({ hid, accessToken, rooms }) => {
     const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
     const [deviceDataChanged, setDeviceDataChanged] = useState<boolean>(false);
 
@@ -30,7 +31,7 @@ const TheDevice: React.FC<Props> = ({ hid, accessToken }) => {
             <Button type="primary" className="ml-2 bg-blue-500 font-bold py-2 px-4 rounded pb-8" onClick={handleCreateModal}>
                 Create Device
             </Button>
-            <ViewDevice hid={hid} accessToken={accessToken} dataChanged={deviceDataChanged} onChange={handleDeviceDataChange} />
+            <ViewDevice rooms={rooms} hid={hid} accessToken={accessToken} dataChanged={deviceDataChanged} onChange={handleDeviceDataChange} />
             <Modal
                 title="Create Device"
                 visible={createModalVisible}

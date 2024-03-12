@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import deviceTypes from '../../../types/deviceTypes';
 import EditDevice from "./EditDevice";
+import ChangeRoomDevice from "../Room/ChangeRoomDevice";
 import ControlLightDevice from "./ControlLightDevice";
 import ViewSensorDevice from "./ViewSensorDevice";
 
@@ -15,15 +16,18 @@ interface Props {
     dataChanged: boolean;
     onChange: () => void;
     rid?: string;
+    rooms?: Room[];
 }
 
-const ViewDevice: React.FC<Props> = ({ hid, accessToken, dataChanged, onChange, rid }) => {
+const ViewDevice: React.FC<Props> = ({ hid, accessToken, dataChanged, onChange, rid, rooms }) => {
     const [devices, setDevices] = useState<Device[]>([]);
     const [selectedDevice, setSelectedDevice] = useState<Device>();
     const [controlModal, setControlModal] = useState<boolean>(false);
     const [viewSensorDevice, setViewSensorDevice] = useState<boolean>(false);
     const [editModal, setEditModal] = useState<boolean>(false);
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
+    const [changeRoomDevice, setChangeRoomDevice] = useState<boolean>(false);
+    const [changeRoomModal, setChangeRoomModal] = useState<boolean>(false);
 
     const isRoomPath = usePathname().startsWith('/room/');
     const cardStyle = isRoomPath ? { flexBasis: '24%', marginBottom: '8px' } : { minWidth: '25%', marginBottom: '8px' };
@@ -43,7 +47,6 @@ const ViewDevice: React.FC<Props> = ({ hid, accessToken, dataChanged, onChange, 
                     device_data: device.device_data
                 });
             } else if (rid === undefined) {
-                console.log(rid);
                 devices.push({
                     did: device._id,
                     device_name: device.device_name,
@@ -92,6 +95,10 @@ const ViewDevice: React.FC<Props> = ({ hid, accessToken, dataChanged, onChange, 
         setEditModal(false);
     };
 
+    const handleCancelChangeModal = () => {
+        setChangeRoomDevice(false);
+    };
+
     const handleCancelControlModal = () => {
         setControlModal(false);
     };
@@ -126,6 +133,15 @@ const ViewDevice: React.FC<Props> = ({ hid, accessToken, dataChanged, onChange, 
         onChange();
     };
 
+    const handleChangeRoomDevice = (device: Device, rid: string) => {
+        const deviceIndex = devices.findIndex((item) => item.did === device.did);
+        if (deviceIndex !== -1) {
+            const updatedDevices = [...devices];
+            updatedDevices[deviceIndex].rid = rid;
+            setDevices(updatedDevices);
+        }
+    }
+
     return (
         <div>
             <div className={`flex mt-4 overflow-x-auto gap-3 ${usePathname().startsWith('/room/') ? 'flex-wrap' : ''}`} style={{ gap: '12px' }}>
@@ -144,7 +160,13 @@ const ViewDevice: React.FC<Props> = ({ hid, accessToken, dataChanged, onChange, 
                                 setDeleteModal(true);
                             }} />,
                             <SettingOutlined key="setting" onClick={() => {
-                                console.log("123");
+                                if (rid) {
+                                    setChangeRoomModal(true);
+                                }
+                                else {
+                                    setSelectedDevice(device);
+                                    setChangeRoomDevice(true);
+                                }
                             }} />,
                         ]}
                     >
@@ -178,6 +200,14 @@ const ViewDevice: React.FC<Props> = ({ hid, accessToken, dataChanged, onChange, 
                 footer={null}
             >
                 {selectedDevice && <EditDevice device={selectedDevice} accessToken={accessToken} onDataUpdated={handleDeviceDataChange} onCancel={handleCancelEditModal} />}
+            </Modal>
+            <Modal
+                title="Change Room For Device"
+                visible={changeRoomDevice}
+                onCancel={handleCancelChangeModal}
+                footer={null}
+            >
+                {selectedDevice && <ChangeRoomDevice device={selectedDevice} rooms={rooms} accessToken={accessToken} onDataUpdated={handleChangeRoomDevice} onCancel={handleCancelChangeModal} />}
             </Modal>
             <Modal
                 title="Control Device"

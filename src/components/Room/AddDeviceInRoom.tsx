@@ -98,6 +98,7 @@ const AddDeviceInRoom: React.FC<Props> = ({ rid, hid, accessToken, onAdd, onCanc
                             message.warning(data.error);
                         } else {
                             message.success(data.message);
+                            setDevices(prevDevices => prevDevices.filter(prevDevice => prevDevice.did !== device.did));
                             onAdd();
                             onCancel();
                         }
@@ -130,11 +131,12 @@ const AddDeviceInRoom: React.FC<Props> = ({ rid, hid, accessToken, onAdd, onCanc
                             checked={checkedDevices.includes(device.did)}
                             onChange={() => handleCheckboxChange(device.did)}
                             className='mr-2'
+                            disabled={!devices || devices.length === 0}
                         />
                         <List.Item.Meta
                             avatar={<Avatar src={device.device_type?.image} />}
                             title={device.device_name}
-                        // description={device.device_type?.description}
+                            description={device.mac_address}
                         />
                     </List.Item>
                 )}
