@@ -9,7 +9,7 @@ import ViewRoom from "../../../components/Room/ViewRoom";
 import CreateRoom from "../../../components/Room/CreateRoom";
 import TheDevice from '../../../components/Device/TheDevice';
 
-const TheRoom: React.FC = () => {
+const TheHome: React.FC = () => {
     const router = useRouter();
     const [homeSelect, setHomeSelect] = useState<string>(() => {
         if (typeof window !== 'undefined') {
@@ -127,4 +127,4 @@ const TheRoom: React.FC = () => {
     );
 }
 
-export default TheRoom;
+export default TheHome;

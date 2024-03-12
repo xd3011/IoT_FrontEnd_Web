@@ -1,7 +1,7 @@
 import { Card, Modal, message } from "antd";
 import { EditOutlined, DeleteOutlined, SettingOutlined } from '@ant-design/icons';
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import deviceTypes from '../../../types/deviceTypes';
 import EditDevice from "./EditDevice";
 import ChangeRoomDevice from "../Room/ChangeRoomDevice";
@@ -20,6 +20,7 @@ interface Props {
 }
 
 const ViewDevice: React.FC<Props> = ({ hid, accessToken, dataChanged, onChange, rid, rooms }) => {
+    const router = useRouter();
     const [devices, setDevices] = useState<Device[]>([]);
     const [selectedDevice, setSelectedDevice] = useState<Device>();
     const [controlModal, setControlModal] = useState<boolean>(false);
@@ -233,6 +234,15 @@ const ViewDevice: React.FC<Props> = ({ hid, accessToken, dataChanged, onChange, 
                 okButtonProps={{ type: "primary", danger: true }}
             >
                 <p>Are you sure you want to delete this device?</p>
+            </Modal>
+            <Modal
+                title="Change Room For Device"
+                visible={changeRoomModal}
+                onOk={() => router.push('/home')}
+                onCancel={() => setChangeRoomModal(false)}
+                okButtonProps={{ type: "primary", className: 'bg-blue-500' }}
+            >
+                <p>Are you sure you want to change room for this device?</p>
             </Modal>
         </div>
     );

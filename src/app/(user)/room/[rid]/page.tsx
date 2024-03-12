@@ -71,10 +71,12 @@ const TheRoomPage: React.FC = (props: any) => {
 
     return (
         <div>
-            <h2>{room?.name}</h2>
-            <Button type="primary" className="ml-2 bg-blue-500 font-bold py-2 px-4 rounded pb-8" onClick={handleAddModal}>
-                Add Device In Room
-            </Button>
+            <div className="flex justify-between">
+                <h2 className="text-xl font-semibold mt-2">{room?.name}</h2>
+                <Button type="primary" className="bg-blue-500 font-bold py-2 px-4 rounded pb-8" onClick={handleAddModal}>
+                    Add Device In Room
+                </Button>
+            </div>
             {room && <ViewDevice rid={rid} hid={homeSelect} accessToken={accessToken} dataChanged={deviceDataChanged} onChange={handleDeviceDataChange}></ViewDevice>}
             <Modal
                 title="Add Device In Room"

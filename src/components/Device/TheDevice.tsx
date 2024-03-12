@@ -28,9 +28,11 @@ const TheDevice: React.FC<Props> = ({ hid, accessToken, rooms }) => {
 
     return (
         <div>
-            <Button type="primary" className="ml-2 bg-blue-500 font-bold py-2 px-4 rounded pb-8" onClick={handleCreateModal}>
-                Create Device
-            </Button>
+            <div className='flex flex-row-reverse'>
+                <Button type="primary" className="ml-2 bg-blue-500 font-bold py-2 px-4 rounded pb-8" onClick={handleCreateModal}>
+                    Create Device
+                </Button>
+            </div>
             <ViewDevice rooms={rooms} hid={hid} accessToken={accessToken} dataChanged={deviceDataChanged} onChange={handleDeviceDataChange} />
             <Modal
                 title="Create Device"

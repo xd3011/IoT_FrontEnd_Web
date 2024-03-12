@@ -8,7 +8,7 @@ import EditHome from "../../../components/Home/EditHome";
 
 const { Meta } = Card;
 
-const TheHome: React.FC = () => {
+const TheHomeUser: React.FC = () => {
     const router = useRouter();
 
     const [homes, setHomes] = useState<Home[]>([]);
@@ -201,4 +201,4 @@ const TheHome: React.FC = () => {
     );
 }
 
-export default TheHome;
+export default TheHomeUser;
