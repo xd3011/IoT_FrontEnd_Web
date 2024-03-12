@@ -5,7 +5,7 @@ import { DeleteOutlined, EditOutlined, UserOutlined } from '@ant-design/icons';
 import type { TableProps } from 'antd';
 import { useRouter } from 'next/navigation';
 import EditUser from "../../../components/User/EditUser";
-import CreateAdminAccount from "../../../components/User/CreateAdminAccount";
+import CreateAccount from "../../../components/User/CreateAdminAccount";
 import type { SearchProps } from 'antd/es/input/Search';
 
 const { Search } = Input;
@@ -273,7 +273,7 @@ const App: React.FC = () => {
         setReload(prev => !prev);
     }
 
-    const handleCreateAdmin = () => {
+    const handleCreateAccount = () => {
         setCreateModalVisible(true);
     };
 
@@ -292,8 +292,8 @@ const App: React.FC = () => {
     return (
         <div>
             <div className="flex items-center">
-                <Button onClick={handleCreateAdmin} type="primary" className="bg-blue-500 font-bold py-2 px-4 pb-8 ml-4 h-10 mt-2 mb-2" icon={<UserOutlined />}>
-                    Create Admin Account
+                <Button onClick={handleCreateAccount} type="primary" className="bg-blue-500 font-bold py-2 px-4 pb-8 ml-4 h-10 mt-2 mb-2" icon={<UserOutlined />}>
+                    Create Account
                 </Button>
                 <div className="ml-auto">
                     <Search placeholder="input search text" onChange={handleSearch} onSearch={onSearch} enterButton className="rounded-lg bg-blue-500" />
@@ -302,12 +302,12 @@ const App: React.FC = () => {
             <Table columns={columns} dataSource={users} pagination={pagination}
                 onChange={handleTableChange} />
             <Modal
-                title="Create Admin Account"
+                title="Create Account"
                 visible={createModalVisible}
                 onCancel={handleCancelCreateModal}
                 footer={null}
             >
-                <CreateAdminAccount accessToken={accessToken} onDataCreated={handleDataUpdate} onCancel={handleCancelCreateModal} />
+                <CreateAccount accessToken={accessToken} onDataCreated={handleDataUpdate} onCancel={handleCancelCreateModal} />
             </Modal>
             <Modal
                 title="Edit User"

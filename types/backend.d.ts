@@ -26,6 +26,7 @@ interface Device {
     gateway_code: string;
     mac_address: string;
     device_type: DeviceType | undefined;
+    hid: string;
     rid: string;
     device_data: DeviceData;
 }

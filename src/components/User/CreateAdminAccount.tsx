@@ -8,7 +8,7 @@ interface Props {
     onDataCreated: () => void;
 }
 
-const CreateAdminAccount: React.FC<Props> = ({ accessToken, onCancel, onDataCreated }) => {
+const CreateAccount: React.FC<Props> = ({ accessToken, onCancel, onDataCreated }) => {
     const [userName, setUserName] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -29,11 +29,10 @@ const CreateAdminAccount: React.FC<Props> = ({ accessToken, onCancel, onDataCrea
 
     const fetchData = async () => {
         try {
-            const resUser = await fetch(`http://localhost:5000/api/user/createAccountAdmin`, {
+            const resUser = await fetch(`http://localhost:5000/api/auth/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': accessToken,
                 },
                 body: JSON.stringify({
                     user_name: userName,
@@ -188,4 +187,4 @@ const CreateAdminAccount: React.FC<Props> = ({ accessToken, onCancel, onDataCrea
     );
 };
 
-export default CreateAdminAccount;
+export default CreateAccount;

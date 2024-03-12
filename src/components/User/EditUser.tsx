@@ -1,4 +1,4 @@
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, Select, message } from "antd";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -22,17 +22,25 @@ const EditUser: React.FC<Props> = ({ user, accessToken, onCancel, onDataUpdated 
     }, [user, form]);
 
     const fetchData = async () => {
+        let genderNumber;
+        if (gender === "male") {
+            genderNumber = -1;
+        }
+        else if (gender === "female") {
+            genderNumber = 1;
+        }
         try {
-            const resUser = await fetch(`http://localhost:5000/api/user/${user.uid}`, {
+            const resUser = await fetch(`http://localhost:5000/api/user/editUser`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': accessToken,
                 },
                 body: JSON.stringify({
+                    uid: user.uid,
                     name: name,
                     age: age,
-                    gender: gender,
+                    gender: genderNumber,
                     address: address,
                     phone: phone,
                     email: email,
@@ -81,9 +89,12 @@ const EditUser: React.FC<Props> = ({ user, accessToken, onCancel, onDataUpdated 
             <Form.Item
                 label="Gender"
                 name="gender"
-                rules={[{ required: true, message: 'Please input the user gender!' }]}
+                rules={[{ required: true, message: 'Please select the user gender!' }]}
             >
-                <Input value={gender} onChange={(e) => setGender(e.target.value)} />
+                <Select value={gender} onChange={(value) => setGender(value)}>
+                    <Select.Option value="male">Male</Select.Option>
+                    <Select.Option value="female">Female</Select.Option>
+                </Select>
             </Form.Item>
 
             <Form.Item

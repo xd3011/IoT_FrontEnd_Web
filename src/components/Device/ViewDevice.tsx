@@ -10,13 +10,14 @@ import ViewSensorDevice from "./ViewSensorDevice";
 const { Meta } = Card;
 
 interface Props {
-    room: Room;
+    hid: string;
     accessToken: string;
     dataChanged: boolean;
     onChange: () => void;
+    rid?: string;
 }
 
-const ViewDevice: React.FC<Props> = ({ room, accessToken, dataChanged, onChange }) => {
+const ViewDevice: React.FC<Props> = ({ hid, accessToken, dataChanged, onChange, rid }) => {
     const [devices, setDevices] = useState<Device[]>([]);
     const [selectedDevice, setSelectedDevice] = useState<Device>();
     const [controlModal, setControlModal] = useState<boolean>(false);
@@ -28,23 +29,40 @@ const ViewDevice: React.FC<Props> = ({ room, accessToken, dataChanged, onChange 
     const cardStyle = isRoomPath ? { flexBasis: '24%', marginBottom: '8px' } : { minWidth: '25%', marginBottom: '8px' };
 
     const convertToDevice = (data: any[]): Device[] => {
-        return data.map(device => {
-            return ({
-                did: device._id,
-                device_name: device.device_name,
-                gateway_code: device.gateway_code,
-                mac_address: device.mac_address,
-                device_type: deviceTypes.deviceTypes.find(type => type.id === device.device_type),
-                rid: device.device_in_room,
-                device_data: device.device_data
-            })
+        const devices: Device[] = [];
+        data.forEach(device => {
+            if (rid !== undefined && device.device_in_room === rid) {
+                devices.push({
+                    did: device._id,
+                    device_name: device.device_name,
+                    gateway_code: device.gateway_code,
+                    mac_address: device.mac_address,
+                    device_type: deviceTypes.deviceTypes.find(type => type.id === device.device_type),
+                    hid: device.device_in_home,
+                    rid: device.device_in_room,
+                    device_data: device.device_data
+                });
+            } else if (rid === undefined) {
+                console.log(rid);
+                devices.push({
+                    did: device._id,
+                    device_name: device.device_name,
+                    gateway_code: device.gateway_code,
+                    mac_address: device.mac_address,
+                    device_type: deviceTypes.deviceTypes.find(type => type.id === device.device_type),
+                    hid: device.device_in_home,
+                    rid: device.device_in_room,
+                    device_data: device.device_data
+                });
+            }
         });
+        return devices;
     };
 
     useEffect(() => {
         const fetchDevice = async () => {
             try {
-                const resDevice = await fetch(`http://localhost:5000/api/device/${room.rid}`, {
+                const resDevice = await fetch(`http://localhost:5000/api/device/${hid}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -68,7 +86,7 @@ const ViewDevice: React.FC<Props> = ({ room, accessToken, dataChanged, onChange 
             }
         }
         fetchDevice();
-    }, [dataChanged, room]);
+    }, [dataChanged, hid]);
 
     const handleCancelEditModal = () => {
         setEditModal(false);
@@ -110,9 +128,6 @@ const ViewDevice: React.FC<Props> = ({ room, accessToken, dataChanged, onChange 
 
     return (
         <div>
-            <div className="mt-3 ml-2 font-medium text-lg">
-                <h2>{room.name}</h2>
-            </div>
             <div className={`flex mt-4 overflow-x-auto gap-3 ${usePathname().startsWith('/room/') ? 'flex-wrap' : ''}`} style={{ gap: '12px' }}>
                 {devices.map((device) => (
                     <Card

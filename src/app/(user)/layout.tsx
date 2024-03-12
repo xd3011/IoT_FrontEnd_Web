@@ -22,17 +22,19 @@ export default function RootLayout({
 }>) {
   const [showExpiredPopup, setShowExpiredPopup] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  const [menuVisible, setMenuVisible] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false)
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const router = useRouter();
   let uid: string;
   let tokenTime: number;
+  let admin: number;
 
   if (typeof localStorage !== 'undefined') {
     uid = localStorage.getItem('uid') || '';
     tokenTime = parseInt(localStorage.getItem('tokenTime') || '0', 10);
+    admin = parseInt(localStorage.getItem('admin') || '0', 10);
     if (!uid) {
       console.error('User id not found');
       router.push('/login');
@@ -55,7 +57,6 @@ export default function RootLayout({
     const timer = setInterval(handleTokenCheck, 30 * 60 * 1000);
     return () => clearInterval(timer);
   }, [tokenTime, router]);
-
 
   const setSelectedDefault = () => {
     const pathname = usePathname().split('/');
@@ -88,6 +89,8 @@ export default function RootLayout({
       handleLogout();
     } else if (key === 'changepassword') {
       router.push('/changepassword')
+    } else if (key === 'admin') {
+      router.push('/admin')
     }
     setMenuVisible(false);
   };
@@ -121,7 +124,9 @@ export default function RootLayout({
     <div>
       <Layout className="min-h-screen">
         <Sider trigger={null} collapsible collapsed={collapsed} style={{ position: 'fixed', height: '100vh' }}>
-          <div className="demo-logo-vertical text-white text-3xl flex justify-center mt-6 mb-6">Logo</div>
+          <div onClick={() => {
+            router.push('/home');
+          }} className="hover:bg-sky-700 demo-logo-vertical text-white text-3xl flex justify-center mt-6 mb-6">Logo</div>
           <Menu
             theme="dark"
             mode="inline"
@@ -177,6 +182,7 @@ export default function RootLayout({
                     <Menu onClick={handleMenuClick}>
                       <Menu.Item key="profile">Profile</Menu.Item>
                       <Menu.Item key="changepassword">Change Password</Menu.Item>
+                      {admin === 1 ? <Menu.Item key="admin">Admin</Menu.Item> : ''}
                       <Menu.Item key="logout">Logout</Menu.Item>
                     </Menu>
                   }

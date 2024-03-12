@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import { useEffect, useState } from 'react';
 import { EditOutlined } from '@ant-design/icons';
-import { message } from 'antd';
+import { Button, QRCode, message } from 'antd';
 
 export default function Example() {
     const router = useRouter();
@@ -36,6 +36,7 @@ export default function Example() {
     const [editAddress, setEditAddress] = useState(false);
     const [initialAddress, setInitialAddress] = useState("");
 
+    const [uid, setUid] = useState("");
     let accessToken: string;
 
     if (typeof localStorage !== 'undefined') {
@@ -66,6 +67,7 @@ export default function Example() {
                     if (!data.user) {
                         message.error(data.error);
                     } else {
+                        setUid(data.user._id);
                         setName(data.user.name);
                         setAge(data.user.age);
                         setGender(data.user.gender === -1 ? "male" : "female");
@@ -358,12 +360,37 @@ export default function Example() {
         setAddress(event.target.value);
     };
 
+    const downloadQRCode = () => {
+        const canvas = document.getElementById('myqrcode')?.querySelector<HTMLCanvasElement>('canvas');
+        if (canvas) {
+            const url = canvas.toDataURL();
+            const a = document.createElement('a');
+            a.download = 'QRCode.png';
+            a.href = url;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    };
+
     return (
         <div className="space-y-12">
             <div className="border-b border-gray-900/10 pb-12 flex">
                 <div className="w-2/5">
                     <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
                     <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
+                    <div id="myqrcode" className="mt-4">
+                        <div className="flex">
+                            <h3 className="mr-4">My User ID:</h3>
+                            <div>
+                                <QRCode value={uid || ''} bgColor="#fff" style={{ marginBottom: 16 }} />
+                                {uid && <Button type="primary" onClick={downloadQRCode} className="bg-blue-500">
+                                    Download
+                                </Button>}
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
                 <div className="border-l border-gray-900/10 h-auto mr-8" />

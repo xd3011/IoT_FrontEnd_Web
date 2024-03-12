@@ -5,18 +5,17 @@ import deviceTypes from '../../../types/deviceTypes';
 const { Option } = Select;
 
 interface Props {
-    rooms: Room[];
+    hid: string;
     accessToken: string;
     onCreate: () => void;
     onCancel: () => void;
 }
 
-const CreateDevice: React.FC<Props> = ({ rooms, accessToken, onCreate, onCancel }) => {
+const CreateDevice: React.FC<Props> = ({ hid, accessToken, onCreate, onCancel }) => {
     const [deviceName, setDeviceName] = useState<string>('');
     const [gatewayCode, setGatewayCode] = useState<string>('');
     const [macAddress, setMacAddress] = useState<string>('');
     const [deviceType, setDeviceType] = useState<DeviceType | undefined>(undefined);
-    const [roomSelect, setRoomSelect] = useState<Room | undefined>(undefined);
     const [form] = Form.useForm();
 
     const createDevice = async () => {
@@ -28,7 +27,7 @@ const CreateDevice: React.FC<Props> = ({ rooms, accessToken, onCreate, onCancel 
                     'Content-Type': 'application/json',
                     'Authorization': accessToken,
                 },
-                body: JSON.stringify({ rid: roomSelect?.rid, device_name: deviceName, gateway_code: gatewayCode, mac_address: macAddress, device_type: deviceType?.id }),
+                body: JSON.stringify({ hid: hid, device_name: deviceName, gateway_code: gatewayCode, mac_address: macAddress, device_type: deviceType?.id }),
             });
             if (res.ok) {
                 const data = await res.json();
@@ -52,7 +51,6 @@ const CreateDevice: React.FC<Props> = ({ rooms, accessToken, onCreate, onCancel 
         setGatewayCode('');
         setMacAddress('');
         setDeviceType(undefined);
-        setRoomSelect(undefined);
     };
 
     return (
@@ -64,27 +62,6 @@ const CreateDevice: React.FC<Props> = ({ rooms, accessToken, onCreate, onCancel 
             className="max-w-3xl mx-auto"
             autoComplete="off"
         >
-            <Form.Item
-                label="Room Select"
-                name="roomSelect"
-                rules={[{ required: true, message: 'Please select the room!' }]}
-            >
-                <Select
-                    className="w-full"
-                    value={roomSelect ? roomSelect.name : undefined}
-                    onChange={(value) => {
-                        const selectedRoom = rooms.find(type => type.name === value);
-                        setRoomSelect(selectedRoom);
-                    }}
-                >
-                    {rooms.map((room) => (
-                        <Option key={room.rid} value={room.name}>
-                            {room.name}
-                        </Option>
-                    ))}
-                </Select>
-            </Form.Item>
-
             <Form.Item
                 label="Device Name"
                 name="deviceName"
