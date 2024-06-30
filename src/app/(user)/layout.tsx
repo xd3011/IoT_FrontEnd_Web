@@ -90,7 +90,7 @@ export default function RootLayout({
     } else if (key === 'changepassword') {
       router.push('/changepassword')
     } else if (key === 'admin') {
-      router.push('/admin')
+      router.push('/admin/user')
     }
     setMenuVisible(false);
   };

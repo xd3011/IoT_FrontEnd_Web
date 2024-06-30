@@ -28,7 +28,7 @@ const TheDevice: React.FC<Props> = ({ hid, accessToken, rooms }) => {
 
     return (
         <div>
-            <div className='flex flex-row-reverse'>
+            <div className='flex flex-row-reverse mt-2'>
                 <Button type="primary" className="ml-2 bg-blue-500 font-bold py-2 px-4 rounded pb-8" onClick={handleCreateModal}>
                     Create Device
                 </Button>

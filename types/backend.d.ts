@@ -33,8 +33,10 @@ interface Device {
 
 interface DeviceType {
     id: number;
+    dtid: string;
     name: string;
     image: string;
+    type: string;
 }
 
 interface DeviceData {

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, message, Checkbox } from 'antd';
+import { Button, message, Checkbox, Empty } from 'antd';
 import deviceTypes from '../../../types/deviceTypes';
 import { List, Avatar } from 'antd';
+import { useRouter } from 'next/navigation';
 
 interface Props {
     rid: string;
@@ -12,6 +13,7 @@ interface Props {
 }
 
 const AddDeviceInRoom: React.FC<Props> = ({ rid, hid, accessToken, onAdd, onCancel }) => {
+    const router = useRouter();
     const [devices, setDevices] = useState<Device[]>([]);
     const [checkedDevices, setCheckedDevices] = useState<string[]>([]);
     const [checkAll, setCheckAll] = useState(false);
@@ -118,32 +120,43 @@ const AddDeviceInRoom: React.FC<Props> = ({ rid, hid, accessToken, onAdd, onCanc
         }
         console.log(selectedDevices);
     }
+    console.log(devices.length);
+
 
     return (
         <div>
-            <Checkbox checked={checkAll} onChange={handleCheckAll}>Check All</Checkbox>
-            <List
-                itemLayout="horizontal"
-                dataSource={devices}
-                renderItem={(device, index) => (
-                    <List.Item>
-                        <Checkbox
-                            checked={checkedDevices.includes(device.did)}
-                            onChange={() => handleCheckboxChange(device.did)}
-                            className='mr-2'
-                            disabled={!devices || devices.length === 0}
-                        />
-                        <List.Item.Meta
-                            avatar={<Avatar src={device.device_type?.image} />}
-                            title={device.device_name}
-                            description={device.mac_address}
-                        />
-                    </List.Item>
-                )}
-            />
-            <div className='flex justify-end'>
-                <Button type="primary" className="ml-2 bg-blue-500" onClick={handleAdd}>Add Device</Button>
-            </div>
+            {devices && devices.length > 0 ? (
+                <>
+                    <Checkbox checked={checkAll} onChange={handleCheckAll}>Check All</Checkbox>
+                    <List
+                        itemLayout="horizontal"
+                        dataSource={devices}
+                        renderItem={(device, index) => (
+                            <List.Item>
+                                <Checkbox
+                                    checked={checkedDevices.includes(device.did)}
+                                    onChange={() => handleCheckboxChange(device.did)}
+                                    className='mr-2'
+                                    disabled={!devices || devices.length === 0}
+                                />
+                                <List.Item.Meta
+                                    avatar={<Avatar src={device.device_type?.image} />}
+                                    title={device.device_name}
+                                    description={device.mac_address}
+                                />
+                            </List.Item>
+                        )}
+                    />
+                    <div className='flex justify-end'>
+                        <Button type="primary" className="ml-2 bg-blue-500" onClick={handleAdd}>Add Device</Button>
+                    </div>
+                </>
+            ) : (
+                <div className="text-center">
+                    <Empty description="No devices found" />
+                    <Button type="primary" className="mt-4 bg-blue-500" onClick={() => router.push('/home')}>Add New Device In Home</Button>
+                </div>
+            )}
         </div>
     );
 };

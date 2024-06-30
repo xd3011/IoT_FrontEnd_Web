@@ -77,6 +77,7 @@ const ViewDevice: React.FC<Props> = ({ hid, accessToken, dataChanged, onChange, 
                     const data = await resDevice.json();
                     if (!data.devices) {
                         message.warning(data.error);
+                        setDevices([])
                     } else {
                         const convertedDevices = convertToDevice(data.devices);
                         setDevices(convertedDevices);
@@ -84,9 +85,12 @@ const ViewDevice: React.FC<Props> = ({ hid, accessToken, dataChanged, onChange, 
                 } else {
                     const data = await resDevice.json();
                     message.error(data.error);
+                    setDevices([]);
                 }
             } catch (error) {
                 console.error('Error fetching device data:', error);
+                message.error('An error occurred while fetching device data');
+                setDevices([]);
             }
         }
         fetchDevice();

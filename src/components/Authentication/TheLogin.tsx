@@ -43,6 +43,21 @@ export default function TheLogin() {
         resetValidation();
     };
 
+    const handleLogout = async (uid: string, indexToken: number) => {
+        const res = await fetch(`http://localhost:5000/api/auth/logout/${uid}`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ indexToken: indexToken }),
+        });
+        if (res.ok) {
+        } else {
+            const data = await res.json();
+            message.error(data.error);
+        }
+    }
+
     const handleLogin = async (e: any) => {
         e.preventDefault();
         const valid = validation(user);
@@ -57,16 +72,24 @@ export default function TheLogin() {
             });
             if (res.ok) {
                 const data = await res.json();
-                const time: number = Date.now() + 24 * 60 * 60 * 1000;
-                localStorage.setItem('tokenTime', time.toString());
-                localStorage.setItem('accessToken', data.accessToken);
-                localStorage.setItem('refreshToken', data.refreshToken);
-                localStorage.setItem('indexToken', data.indexToken);
-                localStorage.setItem('uid', data.uid);
-                localStorage.setItem('admin', data.isAdmin);
-                message.success(data.message);
-                router.push('/home');
+                if (data.isAdmin) {
+                    const time: number = Date.now() + 24 * 60 * 60 * 1000;
+                    localStorage.setItem('tokenTime', time.toString());
+                    localStorage.setItem('accessToken', data.accessToken);
+                    localStorage.setItem('refreshToken', data.refreshToken);
+                    localStorage.setItem('indexToken', data.indexToken);
+                    localStorage.setItem('uid', data.uid);
+                    localStorage.setItem('admin', data.isAdmin);
+                    message.success(data.message);
+                    router.push('/admin/user');
+                }
+                else {
+                    setUser({ user_name: "", pass_word: "" })
+                    message.error("Login failed, you are not an admin");
+                    handleLogout(data.uid, data.indexToken);
+                }
             } else {
+                setUser({ user_name: "", pass_word: "" });
                 const data = await res.json();
                 message.error(data.error);
             }
